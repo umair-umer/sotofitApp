@@ -14,7 +14,7 @@ function navigation() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="getstarted" component={Introsliderscreen} />
-      <Stack.Screen name="signupscreen" component={Signupscreen} />
+      <Stack.Screen name="createprofilescreen" component={Signupscreen} />
 
       </Stack.Navigator>
       </NavigationContainer>
