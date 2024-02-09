@@ -113,6 +113,7 @@ function Signupscreen({navigation}) {
     <>
       {loder ? <Loader /> : <SafeAreaView style={styles.container}>
         <ImageBackground source={Images.Signup} style={styles.backgroundImage}>
+          
           <View style={styles.logoView}>
             <Image
               source={Images.LOGO}

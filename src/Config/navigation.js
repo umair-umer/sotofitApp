@@ -2,9 +2,15 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { 
-  Home,
+Home,
 Introsliderscreen,
-Signupscreen 
+Signupscreen,
+Goalscreen,
+Goalsecscreen,
+Goalthirdscreen, 
+Goalfourthscreen,
+Goalfifthscreen,
+Goalsixthscreen
 
 } from '../Screens';
 import { useSelector } from 'react-redux';
@@ -20,10 +26,19 @@ function navigation() {
          <>
           <Stack.Screen name="home" component={Home} />
           {/* <Stack.Screen name="getstarted" component={Introsliderscreen} /> */}
+          <Stack.Screen name="introslider" component={Introsliderscreen} />
+            <Stack.Screen name="Goalscrn" component={Goalscreen} />
+            <Stack.Screen name="Goalscrnsec" component={Goalsecscreen} />
+            <Stack.Screen name="Goalsrnhrd" component={Goalthirdscreen} />
+            <Stack.Screen name="Goalsrnfrth" component={Goalfourthscreen} />
+            <Stack.Screen name="Goalsrnfive" component={Goalfifthscreen} />
+            <Stack.Screen name="Goalsrnsix" component={Goalsixthscreen} />
+          <Stack.Screen name="home" component={Home} />
          </>
         ) : (
           // Otherwise, go to the intro slider screen
           <>
+        
             <Stack.Screen name="createprofilescreen" component={Signupscreen} />
             {/* Include the Home screen here too so the navigation stack works correctly */}
         
