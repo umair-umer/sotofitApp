@@ -7,6 +7,7 @@ import GMAIL from '../Assests/gmail.png'
 import TWITTER from '../Assests/twittter.png'
 import profilepicture from "../Assests/profilepicture.jpg"
 import Body from  "../Assests/body.jpeg"
+import Goal from '../Assests/Goals.png'
 const Images = {
     
     IMG,
@@ -16,7 +17,9 @@ const Images = {
     FACEBOOK,
     GMAIL,
     TWITTER,
-    profilepicture,Body
+    profilepicture,
+    Body,
+    Goal
 }
 
 

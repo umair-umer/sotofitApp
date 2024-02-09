@@ -57,7 +57,7 @@ function Signupscreen({navigation}) {
         const token = response.data.token;
         // Dispatch action to save token
         dispatch(setAuthToken(token));
-        navigation.navigate("home")
+        navigation.navigate("introslider")
       })
       .catch((error) => {
         console.error(error); 
@@ -111,6 +111,7 @@ function Signupscreen({navigation}) {
     <>
       {loder ? <Loader /> : <SafeAreaView style={styles.container}>
         <ImageBackground source={Images.Signup} style={styles.backgroundImage}>
+          
           <View style={styles.logoView}>
             <Image
               source={Images.LOGO}
