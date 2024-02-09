@@ -55,10 +55,10 @@ function Signupscreen({navigation}) {
       .then((response) => {
         console.log(response.data); 
         const token = response.data.token;
-        const assisment =response.data.user.assesment
+        // const assisment =response.data.user.assesment
         // Dispatch action to save token
         dispatch(setAuthToken(token));
-        dispatch(setAssisment(assisment));
+        // dispatch(setAssisment(assisment));
         navigation.navigate("home")
       })
       .catch((error) => {

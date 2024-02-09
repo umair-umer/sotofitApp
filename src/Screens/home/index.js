@@ -19,7 +19,7 @@ export const Home = () => {
   const [error, setError] = useState('');
   const [load, setloader] = useState();
   const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
-  const token = useSelector((state) => state.assisment);
+  const token = useSelector((state) => state.authToken);
   console.log(token,"asssssss");
   const [searchQuery, setSearchQuery] = useState('');
   useEffect(() => {
@@ -54,7 +54,7 @@ export const Home = () => {
     setloader(true)
     let config = {
       method: 'post',
-      url: 'https://sotofitbackend.azurewebsites.net/api/v1/sotofit/auth/logout',
+      url: `${baseUrl}/auth/logout`,
       headers: {
         'Authorization': `Bearer ${token}`, // Use token from Redux store
       },
@@ -203,9 +203,9 @@ export const Home = () => {
               <View style={styles.premiumTag}>
                 <Text style={styles.premiumText}>Premium</Text>
               </View>
-              <View style={styles.counter}>
+              {/* <View style={styles.counter}>
                 <Text style={styles.counterText}>812</Text>
-              </View>
+              </View> */}
             </View>
            
           </View>
