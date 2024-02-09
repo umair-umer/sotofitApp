@@ -5,7 +5,8 @@ import LOGO from '../Assests/logosotofits.png'
 import FACEBOOK from '../Assests/fbicon.png'
 import GMAIL from '../Assests/gmail.png'
 import TWITTER from '../Assests/twittter.png'
-
+import profilepicture from "../Assests/profilepicture.jpg"
+import Body from  "../Assests/body.jpeg"
 const Images = {
     
     IMG,
@@ -14,7 +15,8 @@ const Images = {
     LOGO,
     FACEBOOK,
     GMAIL,
-    TWITTER
+    TWITTER,
+    profilepicture,Body
 }
 
 
