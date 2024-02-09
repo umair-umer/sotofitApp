@@ -19,7 +19,7 @@ import { baseUrl } from '../../Config/baseurl';
 import axios from 'axios';
 import qs from 'qs';
 import { useDispatch} from 'react-redux';
-import { setAuthToken } from '../../../store/action/actions';
+import { setAssisment, setAuthToken } from '../../../store/action/actions';
 function Signupscreen({navigation}) {
   const dispatch=useDispatch();
   const [loder, setlod] = useState(false)
@@ -55,8 +55,10 @@ function Signupscreen({navigation}) {
       .then((response) => {
         console.log(response.data); 
         const token = response.data.token;
+        const assisment =response.data.user.assesment
         // Dispatch action to save token
         dispatch(setAuthToken(token));
+        dispatch(setAssisment(assisment));
         navigation.navigate("home")
       })
       .catch((error) => {
@@ -75,7 +77,7 @@ function Signupscreen({navigation}) {
     setlod(true); // Start loading
 
     const data = {
-      name: name,
+      firstName: name,
       email: email,
       password: password,
       // device_token should be retrieved from a push notification service

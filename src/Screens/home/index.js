@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, TextInput, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import LinearGradient from 'react-native-linear-gradient';
@@ -12,13 +12,44 @@ import Feather from 'react-native-vector-icons/Feather';
 import { clearAuthToken } from '../../../store/action/actions';
 import { Loader } from '../../Components/loder';
 import axios from 'axios';
+import { baseUrl } from '../../Config/baseurl';
 const imageSize = width * 0.25;
 export const Home = () => {
-
+  const [profileData, setProfileData] = useState();
+  const [error, setError] = useState('');
   const [load, setloader] = useState();
   const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
-  const token = useSelector((state) => state.authToken);
+  const token = useSelector((state) => state.assisment);
+  console.log(token,"asssssss");
   const [searchQuery, setSearchQuery] = useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      setloader(true);
+      const config = {
+        method: 'get',
+        url: `${baseUrl}/auth/profile`,
+        headers: { 
+          'Authorization': `Bearer ${token}`, // Use token from Redux store
+        },
+      };
+
+      try {
+        const response = await axios.request(config);
+        console.log('Profile data:', response.data.data);
+        setProfileData(response.data.data); 
+       console.log(profileData,"poiuhy");
+        setError('');
+      } catch (err) {
+        console.error('Error fetching profile data:', err);
+        setError('An error occurred while fetching profile data.');
+      } finally {
+        setloader(false);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+  
   const handleLogout = () => {
     setloader(true)
     let config = {
@@ -45,13 +76,33 @@ export const Home = () => {
     setSearchQuery(text);
 
   };
+  const profiles = [
+    {
+      name: 'SotoFits Workouts',
+      image: Images.workouts, 
+    },
+    {
+      name: 'Cardio Champions',
+      image: Images.calries,
+    },
+    {
+      name: 'Yoga Masters',
+      image: Images.cutler,
+    },
+    {
+      name: 'Strength Series',
+      image: Images.motivate,
+    },
+  ];
   const [activeDay, setActiveDay] = useState('Today');
 
   const days = ['Today', 'Tue.', 'Wed.', 'Thurs.', 'Fri.'];
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {load ? <Loader /> : <LinearGradient
+    <>
+      {load ? <Loader /> : 
+      <ScrollView showsVerticalScrollIndicator={false}> 
+      <LinearGradient
         colors={['#F855D2', '#E62FFA91', '#FC093ABA']}
         style={styles.container}
       >
@@ -66,7 +117,7 @@ export const Home = () => {
               </View>
               <View style={styles.subhedparentchild}>
                 <Text style={styles.heloo}>hello</Text>
-                <Text style={styles.name}>jhon Adams</Text>
+                <Text style={styles.name}>{profileData?.firstName}</Text>
                 <Text style={styles.datetime}>Monday, Sep 21,2023</Text>
               </View>
 
@@ -93,7 +144,21 @@ export const Home = () => {
             <Feather name="sliders" color={"white"} size={30} style={{ backgroundColor: "rgba(162, 231, 242, 1)", padding: 10, borderRadius: 10 }} />
 
           </View>
-          <View style={styles.crdcontainer}>
+        <ScrollView horizontal style={{flexDirection:"row"}} showsHorizontalScrollIndicator={false}>
+        {profiles.map((profile, index) => (
+        <View key={index} style={styles.crdcontainer}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={profile.image} // If local image, use require(profile.image)
+              style={styles.image}
+            />
+          </View>
+          <Text style={styles.text}>{profile.name}</Text>
+        </View>
+      ))}
+        </ScrollView>
+          
+          {/* <View style={styles.crdcontainer}>
             <View style={styles.imageContainer}>
               <Image
                 source={Images.profilepicture} // Replace with your image path
@@ -101,7 +166,7 @@ export const Home = () => {
               />
             </View>
             <Text style={styles.text}>SotoFits Workouts</Text>
-          </View>
+          </View> */}
           <View style={styles.dayscontainer}>
             {days.map(day => (
               <TouchableOpacity
@@ -131,8 +196,10 @@ export const Home = () => {
                 source={Images.Body}
 
               />
-              <Text style={styles.workoutTitle}>Strengthen Chest & Back</Text>
+             <View style={{backgroundColor:"black",opacity:0.6,position:"relative",bottom:height*0.10}}>
+             <Text style={styles.workoutTitle}>Strengthen Chest & Back</Text>
               <Text style={styles.workoutSubtitle}>SotoFits Basic</Text>
+             </View>
               <View style={styles.premiumTag}>
                 <Text style={styles.premiumText}>Premium</Text>
               </View>
@@ -140,11 +207,49 @@ export const Home = () => {
                 <Text style={styles.counterText}>812</Text>
               </View>
             </View>
-            {/* Add more workout cards here */}
+           
           </View>
+
+          
+      <View style={styles.nutriheader}>
+        <Text style={styles.headerText}>Today's Nutrition</Text>
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View style={styles.nutritionscontainer}>
+     <View  style={styles.imageNutrition}>
+     <Image
+        source={Images.diet} // Replace with your actual image URL
+       style={{width:"100%",height:"100%"} }resizeMode="cover"
+      />
+     </View>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Dinner</Text>
+      </View>
+    </View><View style={styles.nutritionscontainer}>
+     <View  style={styles.imageNutrition}>
+     <Image
+        source={Images.diet} // Replace with your actual image URL
+       style={{width:"100%",height:"100%"} }resizeMode="cover"
+      />
+     </View>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Dinner</Text>
+      </View>
+    </View><View style={styles.nutritionscontainer}>
+     <View  style={styles.imageNutrition}>
+     <Image
+        source={Images.diet} // Replace with your actual image URL
+       style={{width:"100%",height:"100%"} }resizeMode="cover"
+      />
+     </View>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Dinner</Text>
+      </View>
+    </View>
+      </ScrollView>
         </SafeAreaView>
-      </LinearGradient>}
-    </ScrollView>
+      </LinearGradient></ScrollView>}
+      </>
   )
 }
 
@@ -153,7 +258,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   safeArea: {
-    flex: 1,
+    // flex: 1,
     padding: 10,
 
   },
@@ -300,11 +405,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: height * 0.02,
     overflow: 'hidden',
+    height:height*0.28
+
   },
   workoutImage: {
     width: '100%',
     height: undefined,
-    aspectRatio: 1.8,
+    aspectRatio: 1.5,
   },
   workoutTitle: {
     fontSize: calculateFontSize(18),
@@ -349,6 +456,46 @@ const styles = StyleSheet.create({
   counterText: {
     color: '#FFFFFF',
     fontSize: calculateFontSize(14),
+  },
+  nutritionscontainer: {
+    // backgroundColor:"red",
+    width:width*0.9,
+    paddingLeft:width*0.05
+
+    // flex: 1,
+    // backgroundColor: '#000', // Assuming a black background for the whole screen
+  },
+  nutriheader: {
+ marginVertical:height*0.02,
+ paddingHorizontal:width*0.04,
+  },
+  headerText: {
+    color: '#FFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+    // textAlign: 'center',
+  },
+  imageNutrition: {
+    width: width*0.8, // Full width image
+    height: height*0.2, // Set image height
+    resizeMode: 'cover', 
+    borderRadius:10,// Cover the area without stretching
+    overflow:"hidden"
+    
+  },
+  footer: {
+    backgroundColor: "black", // The pink footer color
+    padding: 3,
+    width: width*0.8, 
+    opacity:0.5,
+    position:"relative",
+    bottom:height*0.032
+  },
+  footerText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: "left",
   },
 
 })

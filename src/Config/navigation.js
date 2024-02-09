@@ -18,8 +18,8 @@ function navigation() {
       {token ? (
           // If token exists, go directly to the Home screen
          <>
-          {/* <Stack.Screen name="getstarted" component={Introsliderscreen} /> */}
           <Stack.Screen name="home" component={Home} />
+          {/* <Stack.Screen name="getstarted" component={Introsliderscreen} /> */}
          </>
         ) : (
           // Otherwise, go to the intro slider screen

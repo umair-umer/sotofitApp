@@ -1,10 +1,11 @@
 
-import { CLEAR_AUTH_TOKEN, SET_AUTH_TOKEN } from "../actiontypes/actionTypes";
+import { CLEAR_AUTH_TOKEN, SET_ASSESMENT_Bol, SET_AUTH_TOKEN } from "../actiontypes/actionTypes";
 // authReducer.js
 
 
 const initialState = {
   authToken: null,
+  assisment:false
 };
 
 const authReducer = (state = initialState, action) => {
@@ -19,6 +20,11 @@ const authReducer = (state = initialState, action) => {
           ...state,
           authToken: null, // Clear the token
         };
+        case SET_ASSESMENT_Bol:
+          return {
+            ...state,
+            assisment:false , 
+          };
     default:
       return state;
   }

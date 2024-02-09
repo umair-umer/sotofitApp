@@ -6,7 +6,12 @@ import FACEBOOK from '../Assests/fbicon.png'
 import GMAIL from '../Assests/gmail.png'
 import TWITTER from '../Assests/twittter.png'
 import profilepicture from "../Assests/profilepicture.jpg"
+import diet from "../Assests/diet.jpeg"
 import Body from  "../Assests/body.jpeg"
+import workouts from  "../Assests/workouts.png"
+import calries from  "../Assests/calries.png"
+import cutler from  "../Assests/cutler.png"
+import motivate from  "../Assests/motivate.png"
 const Images = {
     
     IMG,
@@ -16,7 +21,10 @@ const Images = {
     FACEBOOK,
     GMAIL,
     TWITTER,
-    profilepicture,Body
+    profilepicture,
+    Body,
+    workouts,
+    calries,cutler,motivate,diet
 }
 
 
