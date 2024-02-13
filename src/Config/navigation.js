@@ -1,52 +1,58 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { 
-Home,
-Introsliderscreen,
-Signupscreen,
-Goalscreen,
-Goalsecscreen,
-Goalthirdscreen, 
-Goalfourthscreen,
-Goalfifthscreen,
-Goalsixthscreen
-
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  Home,
+  Introsliderscreen,
+  Signupscreen,
+  Goalscreen,
+  Goalsecscreen,
+  Goalthirdscreen,
+  Goalfourthscreen,
+  Goalfifthscreen,
+  Goalsixthscreen,
+  ProfileScreen,
+  EditScreen,
+  Purchasescreen,
+  PaymentOptionsScreen,
 } from '../Screens';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 const Stack = createNativeStackNavigator();
 function navigation() {
-  const token = useSelector((state) => state.authToken);
-  console.log(token,"navigation");
+  const token = useSelector(state => state.authToken);
+  console.log(token, 'navigation');
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-      {token ? (
+        {token ? (
           // If token exists, go directly to the Home screen
-         <>
-          {/* <Stack.Screen name="getstarted" component={Introsliderscreen} /> */}
-          <Stack.Screen name="introslider" component={Introsliderscreen} />
+          <>
+            {/* <Stack.Screen name="getstarted" component={Introsliderscreen} /> */}
+            <Stack.Screen name="introslider" component={Introsliderscreen} />
+            <Stack.Screen name="home" component={Home} />
             <Stack.Screen name="Goalscrn" component={Goalscreen} />
             <Stack.Screen name="Goalscrnsec" component={Goalsecscreen} />
             <Stack.Screen name="Goalsrnhrd" component={Goalthirdscreen} />
             <Stack.Screen name="Goalsrnfrth" component={Goalfourthscreen} />
             <Stack.Screen name="Goalsrnfive" component={Goalfifthscreen} />
             <Stack.Screen name="Goalsrnsix" component={Goalsixthscreen} />
-          <Stack.Screen name="home" component={Home} />
-         </>
+            <Stack.Screen name="profilescreen" component={ProfileScreen} />
+            <Stack.Screen name="Editproscreen" component={EditScreen} />
+            <Stack.Screen name="Reseverscreen" component={Purchasescreen} />
+            <Stack.Screen name="pucahsescreen" component={PaymentOptionsScreen} />
+
+
+          </>
         ) : (
           // Otherwise, go to the intro slider screen
           <>
-        
             <Stack.Screen name="createprofilescreen" component={Signupscreen} />
             {/* Include the Home screen here too so the navigation stack works correctly */}
-        
           </>
         )}
-
       </Stack.Navigator>
-      </NavigationContainer>
-  )
+    </NavigationContainer>
+  );
 }
 
-export default navigation
+export default navigation;

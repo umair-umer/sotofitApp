@@ -8,6 +8,12 @@ import TWITTER from '../Assests/twittter.png'
 import profilepicture from "../Assests/profilepicture.jpg"
 import Body from  "../Assests/body.jpeg"
 import Goal from '../Assests/Goals.png'
+import background from '../Assests/background.png'
+import American from '../Assests/american.png'
+import Paypal from '../Assests/paypal.png'
+import Profileimage from '../Assests/profilepicture.jpg'
+import Mastercard from '../Assests/twodot.png'
+import paymentcard from '../Assests/paymentcard.png'
 const Images = {
     
     IMG,
@@ -19,7 +25,13 @@ const Images = {
     TWITTER,
     profilepicture,
     Body,
-    Goal
+    Goal,
+    background,
+    American,
+    Paypal,
+    Profileimage,
+    Mastercard,
+    paymentcard
 }
 
 

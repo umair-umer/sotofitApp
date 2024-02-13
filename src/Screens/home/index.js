@@ -13,7 +13,7 @@ import { clearAuthToken } from '../../../store/action/actions';
 import { Loader } from '../../Components/loder';
 import axios from 'axios';
 const imageSize = width * 0.25;
-export const Home = () => {
+export const Home = ({navigation}) => {
 
   const [load, setloader] = useState();
   const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
@@ -61,9 +61,11 @@ export const Home = () => {
           </TouchableOpacity>
           <View style={styles.header}>
             <View style={styles.hedsubcontainer}>
-              <View style={styles.imgcontainer}>
+              <TouchableOpacity style={styles.imgcontainer}
+              onPress={()=>navigation.navigate('profilescreen')}
+              >
                 <Image style={{ width: "100%", height: "100%" }} resizeMode='cover' source={Images.profilepicture} />
-              </View>
+              </TouchableOpacity>
               <View style={styles.subhedparentchild}>
                 <Text style={styles.heloo}>hello</Text>
                 <Text style={styles.name}>jhon Adams</Text>
