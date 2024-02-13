@@ -12,6 +12,13 @@ import workouts from  "../Assests/workouts.png"
 import calries from  "../Assests/calries.png"
 import cutler from  "../Assests/cutler.png"
 import motivate from  "../Assests/motivate.png"
+import Goal from '../Assests/Goals.png'
+import background from '../Assests/background.png'
+import American from '../Assests/american.png'
+import Paypal from '../Assests/paypal.png'
+import Profileimage from '../Assests/profilepicture.jpg'
+import Mastercard from '../Assests/twodot.png'
+import paymentcard from '../Assests/paymentcard.png'
 const Images = {
     
     IMG,
