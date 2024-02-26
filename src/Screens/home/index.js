@@ -14,9 +14,8 @@ import { Loader } from '../../Components/loder';
 import axios from 'axios';
 import { baseUrl } from '../../Config/baseurl';
 const imageSize = width * 0.25;
-export const Home = () => {
-  const [profileData, setProfileData] = useState();
-  const [error, setError] = useState('');
+export const Home = ({navigation}) => {
+
   const [load, setloader] = useState();
   const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
   const token = useSelector((state) => state.authToken);

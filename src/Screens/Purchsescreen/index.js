@@ -10,7 +10,7 @@ function Purchasescreen({navigation}) {
     return (
         <SafeAreaView>
             <ImageBackground style={styles.container} resizeMode='cover' source={Images.background}>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.descback}>
                         <Text style={styles.desc}>Cancel Anytime 7-Day Free Trial</Text>
                     </View>
