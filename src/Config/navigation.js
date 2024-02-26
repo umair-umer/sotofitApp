@@ -15,6 +15,13 @@ import {
   EditScreen,
   Purchasescreen,
   PaymentOptionsScreen,
+  Checkout,
+  Exercisescreen,
+  Grocerylistscreen,
+  Calorietrackerscreen,
+  Foodsearchscreen,
+  Foodselectscreen,
+  Breakfastscreen,
 } from '../Screens';
 import {useSelector} from 'react-redux';
 const Stack = createNativeStackNavigator();
@@ -40,8 +47,13 @@ function navigation() {
             <Stack.Screen name="Editproscreen" component={EditScreen} />
             <Stack.Screen name="Reseverscreen" component={Purchasescreen} />
             <Stack.Screen name="pucahsescreen" component={PaymentOptionsScreen} />
-
-
+            <Stack.Screen name="checkoutscreen" component={Checkout} />
+            <Stack.Screen name="exercisescreen" component={Exercisescreen} />
+            <Stack.Screen name="groceryscreen" component={Grocerylistscreen} />
+            <Stack.Screen name="calories" component={Calorietrackerscreen} />
+            <Stack.Screen name="food" component={Foodsearchscreen} />
+            <Stack.Screen name="selectfood" component={Foodselectscreen} />
+            <Stack.Screen name="breakfast" component={Breakfastscreen} />
           </>
         ) : (
           // Otherwise, go to the intro slider screen

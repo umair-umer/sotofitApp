@@ -12,7 +12,7 @@ const EditScreen = ({navigation}) => {
             colors={['#F855D2', '#E62FFA91', '#FC093ABA']}
             style={styles.container}
         >
-            <ScrollView style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <View style={styles.profileSection}>
                     <Image
                         source={Images.Profileimage}

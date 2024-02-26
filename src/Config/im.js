@@ -14,6 +14,18 @@ import Paypal from '../Assests/paypal.png'
 import Profileimage from '../Assests/profilepicture.jpg'
 import Mastercard from '../Assests/twodot.png'
 import paymentcard from '../Assests/paymentcard.png'
+import CHECKBACK from '../Assests/checkoutback.png'
+import EXERCISEONE from '../Assests/exerciseone.png'
+import EXERCISETWO from '../Assests/exercisetwo.png'
+import EXERCISEBACK from '../Assests/exerciseback.png'
+import GROCERYBACK from '../Assests/grocerylistback.png'
+import GROCERYBACKTWO from '../Assests/grocerylist2.png'
+import CALORIECHART from '../Assests/chartcalorie.png'
+import PROTEIN1 from '../Assests/protein1.png'
+import PROTEIN2 from '../Assests/protein2.png'
+import PROTEIN3 from '../Assests/protein3.png'
+import BREAKFASTGRAPH from '../Assests/breakfastgraph.png'
+
 const Images = {
     
     IMG,
@@ -31,7 +43,18 @@ const Images = {
     Paypal,
     Profileimage,
     Mastercard,
-    paymentcard
+    paymentcard,
+    CHECKBACK,
+    EXERCISEBACK,
+    EXERCISEONE,
+    EXERCISETWO,
+    GROCERYBACK,
+    GROCERYBACKTWO,
+    CALORIECHART,
+    PROTEIN1,
+    PROTEIN2,
+    PROTEIN3,
+    BREAKFASTGRAPH,
 }
 
 

@@ -5,12 +5,14 @@ import Images from '../../Config/im'
 import { calculateFontSize } from '../../Config/font';
 const { width, height } = Dimensions.get('window');
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import navigation from '../../Config/navigation';
 
-function PaymentOptionsScreen() {
+function PaymentOptionsScreen({navigation}) {
     return (
         <LinearGradient colors={['#F855D2', '#E62FFA91', '#FC093ABA']}
             style={styles.container}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false
+            }>
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerText}>Payment Options</Text>
                 </View>
@@ -18,7 +20,7 @@ function PaymentOptionsScreen() {
                     
                     <Text style={styles.cardTitle}>Your Card</Text>
                     <Image source={Images.paymentcard} style={styles.cardimage}></Image>
-                    <TouchableOpacity style={styles.addButton}>
+                    <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('checkoutscreen')}>
                         <Text style={styles.addButtonText}>Add New Card</Text>
                     </TouchableOpacity>
                 </View>
