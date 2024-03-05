@@ -50,7 +50,7 @@ function Goalscreen({navigation}) {
       setSelectedGoals([...selectedGoals, goal]);
     }
   };
-
+ console.log(selectedBarriers,selectedGoals,age,gender,height,weight,importanceLevel,challenges)
   const toggleBarrierSelection = barrier => {
     setSelectedBarriers(currentBarriers =>
       currentBarriers.includes(barrier)

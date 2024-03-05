@@ -15,10 +15,11 @@ import {calculateFontSize} from '../../Config/font';
 
 const {width, height} = Dimensions.get('window');
 
-function Goalfifthscreen({navigation}) {
+function Goalfifthscreen({navigation,route}) {
+
+  const { selectedFlexibility, selectedJobCondition, selectedEnergyTime, occupation, jobConditionDetails } = route.params;
   const [mealTracking, setMealTracking] = useState('');
-  const [personalizedNutritionPlan, setPersonalizedNutritionPlan] =
-    useState('');
+  const [personalizedNutritionPlan, setPersonalizedNutritionPlan] = useState('');
   const [specificAllergies, setSpecificAllergies] = useState('');
 
   const handleMealTrackingSelection = option => {
@@ -207,7 +208,16 @@ function Goalfifthscreen({navigation}) {
           <View style={styles.forpad2}>
             <TouchableOpacity
               style={{flexDirection: 'row', justifyContent: 'center'}}
-              onPress={() => navigation.navigate('Goalsrnsix')}>
+              onPress={() => navigation.navigate('Goalsrnsix',{
+                selectedFlexibility,
+                selectedJobCondition,
+                selectedEnergyTime,
+                occupation,
+                jobConditionDetails,
+                mealTracking,
+                personalizedNutritionPlan,
+                specificAllergies,
+              })}>
               <Text style={styles.button}>Continue</Text>
             </TouchableOpacity>
           </View>
