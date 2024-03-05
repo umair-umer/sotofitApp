@@ -8,10 +8,6 @@ import TWITTER from '../Assests/twittter.png'
 import profilepicture from "../Assests/profilepicture.jpg"
 import diet from "../Assests/diet.jpeg"
 import Body from  "../Assests/body.jpeg"
-import workouts from  "../Assests/workouts.png"
-import calries from  "../Assests/calries.png"
-import cutler from  "../Assests/cutler.png"
-import motivate from  "../Assests/motivate.png"
 import Goal from '../Assests/Goals.png'
 import background from '../Assests/background.png'
 import American from '../Assests/american.png'

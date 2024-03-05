@@ -33,10 +33,10 @@ function navigation() {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         {token ? (
           // If token exists, go directly to the Home screen
-         <>
-          <Stack.Screen name="home" component={Home} />
-          <Stack.Screen name="getstarted" component={Introsliderscreen} />
-          <Stack.Screen name="introslider" component={Introsliderscreen} />
+          <>
+            <Stack.Screen name="getstarted" component={Introsliderscreen} />
+            <Stack.Screen name="introslider" component={Introsliderscreen} />
+            <Stack.Screen name="home" component={Home} />
             <Stack.Screen name="Goalscrn" component={Goalscreen} />
             <Stack.Screen name="Goalscrnsec" component={Goalsecscreen} />
             <Stack.Screen name="Goalsrnhrd" component={Goalthirdscreen} />
