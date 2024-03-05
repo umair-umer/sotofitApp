@@ -12,12 +12,61 @@ import {
 } from 'react-native';
 import Images from '../../Config/im';
 import {calculateFontSize} from '../../Config/font';
+import {useDispatch,useSelector} from 'react-redux';
+import {setAuthToken} from '../../../store/action/actions';
+import axios from 'axios';
 
 const {width, height} = Dimensions.get('window');
 
-function Goalsixthscreen({navigation}) {
+function Goalsixthscreen({navigation, route}) {
+  const {
+    selectedFlexibility,
+    selectedJobCondition,
+    selectedEnergyTime,
+    occupation,
+    jobConditionDetails,
+    mealTracking,
+    personalizedNutritionPlan,
+    specificAllergies,
+  } = route.params;
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.authToken);
+  // console.log('token====>>>>', token);
+  dispatch(setAuthToken(token));
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [additionalDetails, setAdditionalDetails] = useState('');
 
+  const handleSubmit = async () => {
+    const dataToSend = {
+      selectedFlexibility,
+      selectedJobCondition,
+      selectedEnergyTime,
+      occupation,
+      jobConditionDetails,
+      mealTracking,
+      personalizedNutritionPlan,
+      specificAllergies,
+      selectedOptions,
+      additionalDetails,
+    };
+  
+    try {
+      const response = await axios({
+        method: 'POST', 
+        url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/mobile/home/assessment',
+        headers: {
+          'Content-Type': 'application/json', // Un-commented and corrected
+          'Authorization': `Bearer ${token}`,
+        },
+        data: dataToSend, // Data is appropriate for a POST request
+      });
+      console.log(response.data.data,"assihg");
+      navigation.navigate("Home"); // Ensure this matches the name of your route exactly
+    } catch (error) {
+      console.error(error.response);
+      // Consider updating the UI to inform the user of the error
+    }
+  };
   const options = [
     'Health/Wellness (General)',
     'I am preparing for a competition (if so, enter the type of competition in the comments box below)',
@@ -37,9 +86,11 @@ function Goalsixthscreen({navigation}) {
   };
 
   return (
-      <SafeAreaView>
-    <ImageBackground source={Images.Goal} style={styles.background}>
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+    <SafeAreaView>
+      <ImageBackground source={Images.Goal} style={styles.background}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.container}>
           <View style={styles.forpad1}>
             <Text style={styles.heading}>
               <Text style={{fontStyle: 'italic'}}>SotoFits</Text> Personal
@@ -67,18 +118,24 @@ function Goalsixthscreen({navigation}) {
             <Text style={styles.information}>
               PROVIDE ANY ADDITIONAL DETAILS ABOUT YOUR SELECTIONS ABOVE.
             </Text>
-            <TextInput style={styles.textarea} />
+            <TextInput
+              placeholder="PROVIDE ANY ADDITIONAL DETAILS ABOUT YOUR SELECTIONS ABOVE"
+              placeholderTextColor={'#fff'}
+              style={styles.textarea}
+              onChangeText={setAdditionalDetails} // Update state with user input
+              value={additionalDetails} // Controlled component
+            />
           </View>
           <View style={styles.forpad2}>
             <TouchableOpacity
               style={{flexDirection: 'row', justifyContent: 'center'}}
-              onPress={() => navigation.navigate('home')}>
+              onPress={handleSubmit}>
               <Text style={styles.button}>Finish</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
-    </ImageBackground>
-      </SafeAreaView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 }
 
@@ -114,7 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: calculateFontSize(15),
     color: '#fff',
-    paddingVertical: height * 0.05,
+    // paddingVertical: height * 0.05,
     marginVertical: height * 0.02,
     height: height * 0.09,
   },

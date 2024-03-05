@@ -19,6 +19,8 @@ function Goalfourthscreen({navigation}) {
   const [selectedFlexibility, setSelectedFlexibility] = useState('');
   const [selectedJobCondition, setSelectedJobCondition] = useState('');
   const [selectedEnergyTime, setSelectedEnergyTime] = useState('');
+  const [occupation, setOccupation] = useState('');
+  const [jobConditionDetails, setJobConditionDetails] = useState('');
 
   // Function to handle selection for the flexibility question
   const handleFlexibilitySelection = option => {
@@ -82,98 +84,115 @@ function Goalfourthscreen({navigation}) {
 
   return (
     <SafeAreaView>
-    <ImageBackground source={Images.Goal} style={styles.background}>
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <View style={styles.forpad1}>
-          <Text style={styles.heading}>
-            <Text style={{fontStyle: 'italic'}}>SotoFits</Text> Personal Fitness
-            Assessment
-          </Text>
-        </View>
-        <View style={styles.forpad2}>
-          <Text style={styles.information}>
-            HOW EASILY CAN YOU BEND OVER AND TOUCH YOUR TOES?
-          </Text>
-          <View style={styles.forinputs}>
-            {renderOption(
-              'Not even close',
-              selectedFlexibility,
-              handleFlexibilitySelection,
-            )}
-            {renderOption(
-              'Nearly/Almost',
-              selectedFlexibility,
-              handleFlexibilitySelection,
-            )}
-            {renderOption(
-              'Just Barely',
-              selectedFlexibility,
-              handleFlexibilitySelection,
-            )}
-            {renderOption(
-              'Easily',
-              selectedFlexibility,
-              handleFlexibilitySelection,
-            )}
+      <ImageBackground source={Images.Goal} style={styles.background}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.container}>
+          <View style={styles.forpad1}>
+            <Text style={styles.heading}>
+              <Text style={{fontStyle: 'italic'}}>SotoFits</Text> Personal
+              Fitness Assessment
+            </Text>
           </View>
-        </View>
-        <View style={styles.forpad2}>
-          <Text style={styles.information}>LIFESTYLE</Text>
-          <TextInput
-            style={styles.textarea}
-            placeholder="What is your occupation?"
-            placeholderTextColor="#fff"
-          />
-        </View>
-        <View style={styles.forpad2}>
-          <Text style={styles.information}>DOES YOUR JOB ALLOW FOR?</Text>
-          <View style={styles.forinputs}>
-            <TouchableOpacity style={styles.inputbuttons}>
-              <Text style={styles.inputbutton}>
-                Extended Periods of Sitting
-              </Text>
+          <View style={styles.forpad2}>
+            <Text style={styles.information}>
+              HOW EASILY CAN YOU BEND OVER AND TOUCH YOUR TOES?
+            </Text>
+            <View style={styles.forinputs}>
+              {renderOption(
+                'Not even close',
+                selectedFlexibility,
+                handleFlexibilitySelection,
+              )}
+              {renderOption(
+                'Nearly/Almost',
+                selectedFlexibility,
+                handleFlexibilitySelection,
+              )}
+              {renderOption(
+                'Just Barely',
+                selectedFlexibility,
+                handleFlexibilitySelection,
+              )}
+              {renderOption(
+                'Easily',
+                selectedFlexibility,
+                handleFlexibilitySelection,
+              )}
+            </View>
+          </View>
+          <View style={styles.forpad2}>
+            <Text style={styles.information}>LIFESTYLE</Text>
+            <TextInput
+              style={styles.textarea}
+              placeholder="What is your occupation?"
+              placeholderTextColor="#fff"
+              value={occupation}
+              onChangeText={setOccupation}
+            />
+          </View>
+          <View style={styles.forpad2}>
+            <Text style={styles.information}>DOES YOUR JOB ALLOW FOR?</Text>
+            <View style={styles.forinputs}>
+              <TouchableOpacity style={styles.inputbuttons}>
+                <Text style={styles.inputbutton}>
+                  Extended Periods of Sitting
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.forinputs}>
+              <TouchableOpacity style={styles.inputbuttons}>
+                <Text style={styles.inputbutton}>
+                  Extended Periods of Sitting
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.forinputs}>
+              <TouchableOpacity style={styles.inputbuttons}>
+                <Text style={styles.inputbutton}>
+                  Extended Periods of Repetitive Movement
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <TextInput
+              style={styles.textarea}
+              placeholder="Please describe the above in more detail."
+              placeholderTextColor="#fff"
+              value={jobConditionDetails}
+              onChangeText={setJobConditionDetails}
+            />
+          </View>
+          <View style={styles.forpad2}>
+            <Text style={styles.information}>
+              WHAT TIME OF DAY ARE YOU MOST ENERGIZED?
+            </Text>
+            <View style={styles.forinputs}>
+              {renderEnergizedTimeOption('Morning (6:00am - 11:00am)')}
+              {renderEnergizedTimeOption(
+                'Mid-day/Afternoon (11:00am - 5:00pm)',
+              )}
+              {renderEnergizedTimeOption('Evening (5:00pm - 10:00pm)')}
+              {renderEnergizedTimeOption('Night (after 10:00pm)')}
+            </View>
+          </View>
+          <View style={styles.forpad2}>
+            <TouchableOpacity
+              style={{flexDirection: 'row', justifyContent: 'center'}}
+              onPress={() =>
+                navigation.navigate('Goalsrnfive', {
+                  selectedFlexibility,
+                  selectedJobCondition,
+                  selectedEnergyTime,
+                  occupation,
+                  jobConditionDetails,
+                })
+              }>
+              <Text style={styles.button}>Continue</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.forinputs}>
-            <TouchableOpacity style={styles.inputbuttons}>
-              <Text style={styles.inputbutton}>
-                Extended Periods of Sitting
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.forinputs}>
-            <TouchableOpacity style={styles.inputbuttons}>
-              <Text style={styles.inputbutton}>
-                Extended Periods of Repetitive Movement
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <TextInput
-            style={styles.textarea}
-            placeholder="Please describe the above in more detail."
-            placeholderTextColor="#fff"
-          />
-        </View>
-        <View style={styles.forpad2}>
-          <Text style={styles.information}>
-            WHAT TIME OF DAY ARE YOU MOST ENERGIZED?
-          </Text>
-          <View style={styles.forinputs}>
-            {renderEnergizedTimeOption('Morning (6:00am - 11:00am)')}
-            {renderEnergizedTimeOption('Mid-day/Afternoon (11:00am - 5:00pm)')}
-            {renderEnergizedTimeOption('Evening (5:00pm - 10:00pm)')}
-            {renderEnergizedTimeOption('Night (after 10:00pm)')}
-          </View>
-        </View>
-        <View style={styles.forpad2}>
-          <TouchableOpacity
-            style={{flexDirection: 'row', justifyContent: 'center'}}
-            onPress={() => navigation.navigate('Goalsrnfive')}>
-            <Text style={styles.button}>Continue</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </ImageBackground>
+        </ScrollView>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
