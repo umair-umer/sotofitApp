@@ -12,61 +12,109 @@ import {
 } from 'react-native';
 import Images from '../../Config/im';
 import {calculateFontSize} from '../../Config/font';
-import {useDispatch,useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setAuthToken} from '../../../store/action/actions';
 import axios from 'axios';
+import {baseUrl} from '../../Config/baseurl';
 
 const {width, height} = Dimensions.get('window');
 
 function Goalsixthscreen({navigation, route}) {
-  const {
-    selectedFlexibility,
-    selectedJobCondition,
-    selectedEnergyTime,
-    occupation,
-    jobConditionDetails,
-    mealTracking,
-    personalizedNutritionPlan,
-    specificAllergies,
-  } = route.params;
+  const userData = route.params?.data;
   const dispatch = useDispatch();
   const token = useSelector(state => state.authToken);
-  // console.log('token====>>>>', token);
   dispatch(setAuthToken(token));
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [additionalDetails, setAdditionalDetails] = useState('');
 
   const handleSubmit = async () => {
-    const dataToSend = {
-      selectedFlexibility,
-      selectedJobCondition,
-      selectedEnergyTime,
-      occupation,
-      jobConditionDetails,
-      mealTracking,
-      personalizedNutritionPlan,
-      specificAllergies,
-      selectedOptions,
-      additionalDetails,
-    };
-  
-    try {
-      const response = await axios({
-        method: 'POST', 
-        url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/mobile/home/assessment',
-        headers: {
-          'Content-Type': 'application/json', // Un-commented and corrected
-          'Authorization': `Bearer ${token}`,
-        },
-        data: dataToSend, // Data is appropriate for a POST request
-      });
-      console.log(response.data.data,"assihg");
-      navigation.navigate("Home"); // Ensure this matches the name of your route exactly
-    } catch (error) {
-      console.error(error.response);
-      // Consider updating the UI to inform the user of the error
-    }
+    const dataToSend = JSON.stringify({
+      age: userData?.age,
+      gender: userData?.gender,
+      height: userData?.height,
+      weight: userData?.weight,
+      buildMuscle: true,
+      improveFlexibility: false,
+      loseWeight: false,
+      gainWeight: false,
+      increaseEndurance: true,
+      improveDiet: false,
+      fitnessGoalDesc: userData?.challenges,
+      goalsImportance: userData?.importanceLevel,
+      energyLevel: false,
+      notEnoughTime: true,
+      barrierDiet: false,
+      barrierMotivation: true,
+      disabilityOrInjury: false,
+      costs: false,
+      barrierDesc: userData?.challenges2,
+      readyNow: true,
+      wantToChange: false,
+      startedChanges: false,
+      wantToChangeUnable: false,
+      goalMotivation: userData?.confidenceLevel,
+      seeingResults: 10,
+      beingHeldAccountable: 8,
+      praiseOrRewards: 5,
+      havingFun: 7,
+      feelingBetterAboutYourself: 9,
+      motivationOther: userData?.otherMotivation, //condition lagana hai
+      exerciseFrequency: userData?.exercise,
+      weightLifting: true,
+      cardio: true,
+      strectching: false,
+      yoga: false,
+      hiit: false,
+      sports: true,
+      exerciseTypeOther: userData?.otherExercise, //condition lagana hai
+      exerciseDuration: userData?.timesExercises,
+      runningFrequency: userData?.outDoors,
+      notEvenClose: false,
+      nearlyOrAlmost: false,
+      justBarely: true,
+      easily: false,
+      occupation: userData?.occupation,
+      extendedSitting: true,
+      extendedStanding: false,
+      repetitiveMovement: false,
+      jobDesc: userData?.jobConditionDetails,
+      mostEnergizedTime: userData?.selectedEnergyTime,
+      trackMeals: userData?.mealTracking,
+      interestedInNutritionPlan: userData?.personalizedNutritionPlan,
+      eatingDisorder: userData?.specificAllergies,
+      favoriteFoods: userData?.favoriteFood,
+      dislikedFoods: userData?.diet,
+      dietRestriction: userData?.allergires,
+      healthWellness: true,
+      competition: false,
+      workoutRoutine: true,
+      nutritionPlan: true,
+      calorieTracking: false,
+      lifestyleChange: true,
+      readyToGetFit: true,
+      instructorDesc: additionalDetails,
+    });
+
+    console.log('userComplete details--------->', JSON.parse(dataToSend));
+    // try {
+    //   let response = await axios
+    //     .post(`${baseUrl}/mobile/home/assessment`, dataToSend, {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     })
+    //     .then(res => {
+    //       console.log('response submit assessment', res.data);
+    //     })
+    //     .catch(err => {
+    //       console.log('error submit assessment', err);
+    //     });
+    // } catch (e) {
+    //   console.log('catch error  in submitAssessment', e);
+    // }
   };
+
   const options = [
     'Health/Wellness (General)',
     'I am preparing for a competition (if so, enter the type of competition in the comments box below)',
@@ -101,18 +149,20 @@ function Goalsixthscreen({navigation, route}) {
             <Text style={styles.information}>
               I AM SEEKING A SOTOFITS INSTRUCTOR FOR:
             </Text>
-            {options.map((option, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.inputbuttons,
-                  selectedOptions.includes(option) && styles.selectedInput,
-                  {marginBottom: 10},
-                ]}
-                onPress={() => toggleOption(option)}>
-                <Text style={styles.inputbutton}>{option}</Text>
-              </TouchableOpacity>
-            ))}
+            <View style={{marginVertical: 16}}>
+              {options.map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.inputbuttons,
+                    selectedOptions.includes(option) && styles.selectedInput,
+                    {marginBottom: 10},
+                  ]}
+                  onPress={() => toggleOption(option)}>
+                  <Text style={styles.inputbutton}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
           <View style={styles.forpad2}>
             <Text style={styles.information}>
@@ -120,10 +170,11 @@ function Goalsixthscreen({navigation, route}) {
             </Text>
             <TextInput
               placeholder="PROVIDE ANY ADDITIONAL DETAILS ABOUT YOUR SELECTIONS ABOVE"
-              placeholderTextColor={'#fff'}
+              placeholderTextColor={'gray'}
               style={styles.textarea}
-              onChangeText={setAdditionalDetails} // Update state with user input
-              value={additionalDetails} // Controlled component
+              onChangeText={setAdditionalDetails}
+              value={additionalDetails}
+              numberOfLines={2}
             />
           </View>
           <View style={styles.forpad2}>
@@ -171,9 +222,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: calculateFontSize(15),
     color: '#fff',
-    // paddingVertical: height * 0.05,
-    marginVertical: height * 0.02,
-    height: height * 0.09,
+    marginVertical: 25,
+    textAlignVertical: 'top',
+    textAlign: 'left',
+    paddingLeft: 13,
   },
   button: {
     backgroundColor: '#a2e7f2',

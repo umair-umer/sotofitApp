@@ -15,12 +15,15 @@ import {calculateFontSize} from '../../Config/font';
 
 const {width, height} = Dimensions.get('window');
 
-function Goalfifthscreen({navigation,route}) {
-
-  const { selectedFlexibility, selectedJobCondition, selectedEnergyTime, occupation, jobConditionDetails } = route.params;
+function Goalfifthscreen({navigation, route}) {
+  const userData = route.params?.data;
   const [mealTracking, setMealTracking] = useState('');
-  const [personalizedNutritionPlan, setPersonalizedNutritionPlan] = useState('');
+  const [personalizedNutritionPlan, setPersonalizedNutritionPlan] =
+    useState('');
   const [specificAllergies, setSpecificAllergies] = useState('');
+  const [favoriteFood, setFavoriteFood] = useState('');
+  const [diet, setDiet] = useState('');
+  const [allergires, setAllergires] = useState('');
 
   const handleMealTrackingSelection = option => {
     setMealTracking(option === mealTracking ? '' : option);
@@ -36,6 +39,19 @@ function Goalfifthscreen({navigation,route}) {
     setSpecificAllergies(option === specificAllergies ? '' : option);
   };
 
+  const handleContinue = () => {
+    const data = {
+      ...userData,
+      mealTracking: mealTracking,
+      personalizedNutritionPlan: personalizedNutritionPlan,
+      specificAllergies: specificAllergies,
+      favoriteFood: favoriteFood,
+      diet: diet,
+      allergires: allergires,
+    };
+    navigation.navigate('Goalsrnsix', {data: data});
+  };
+
   return (
     <SafeAreaView>
       <ImageBackground source={Images.Goal} style={styles.background}>
@@ -49,6 +65,7 @@ function Goalfifthscreen({navigation,route}) {
             </Text>
           </View>
           <View style={styles.forpad2}>
+            <Text style={styles.information}>NUTRITION</Text>
             <Text style={styles.information}>
               DO YOU TRACK YOUR MEALS/MACROS?
             </Text>
@@ -190,34 +207,40 @@ function Goalfifthscreen({navigation,route}) {
             <Text style={styles.information}>
               WHAT ARE YOUR FAVORITE FOODS?
             </Text>
-            <TextInput style={styles.textarea} />
+            <TextInput
+              style={styles.textarea}
+              numberOfLines={2}
+              onChangeText={setFavoriteFood}
+              value={favoriteFood}
+            />
           </View>
           <View style={styles.forpad2}>
             <Text style={[styles.information, styles.white]}>
               WHAT FOODS DO YOU DISLIKE AND CANNOT EAT ON A DIET?
             </Text>
-            <TextInput style={styles.textarea} />
+            <TextInput
+              style={styles.textarea}
+              numberOfLines={2}
+              onChangeText={setDiet}
+              value={diet}
+            />
           </View>
           <View style={styles.forpad2}>
             <Text style={styles.information}>
               LIST ANY SPECIFIC ALLERGIES OR DIETARY RESTRICTIONS YOU HAVE
               (I.E., VEGETARIAN, GLUTEN-FREE, NO LACTOSE, ETC.)
             </Text>
-            <TextInput style={styles.textarea} />
+            <TextInput
+              style={styles.textarea}
+              numberOfLines={2}
+              onChangeText={setAllergires}
+              value={allergires}
+            />
           </View>
           <View style={styles.forpad2}>
             <TouchableOpacity
               style={{flexDirection: 'row', justifyContent: 'center'}}
-              onPress={() => navigation.navigate('Goalsrnsix',{
-                selectedFlexibility,
-                selectedJobCondition,
-                selectedEnergyTime,
-                occupation,
-                jobConditionDetails,
-                mealTracking,
-                personalizedNutritionPlan,
-                specificAllergies,
-              })}>
+              onPress={handleContinue}>
               <Text style={styles.button}>Continue</Text>
             </TouchableOpacity>
           </View>
@@ -263,9 +286,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: calculateFontSize(15),
     color: '#fff',
-    paddingHorizontal: 8,
-    marginVertical: 8,
-    height: height * 0.07,
+    marginVertical: 25,
+    textAlignVertical: 'top',
+    textAlign: 'left',
+    paddingLeft: 13,
   },
   button: {
     backgroundColor: '#a2e7f2',

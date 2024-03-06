@@ -38,10 +38,11 @@ function Goalscreen({navigation}) {
   const [selectedBarriers, setSelectedBarriers] = useState([]);
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
-  const [height, setHeight] = useState('');
+  const [userHeight, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [importanceLevel, setImportanceLevel] = useState('');
   const [challenges, setChallenges] = useState('');
+  const [challenges2, setChallenges2] = useState('');
 
   const toggleGoalSelection = goal => {
     if (selectedGoals.includes(goal)) {
@@ -50,13 +51,25 @@ function Goalscreen({navigation}) {
       setSelectedGoals([...selectedGoals, goal]);
     }
   };
- console.log(selectedBarriers,selectedGoals,age,gender,height,weight,importanceLevel,challenges)
+
   const toggleBarrierSelection = barrier => {
     setSelectedBarriers(currentBarriers =>
       currentBarriers.includes(barrier)
         ? currentBarriers.filter(item => item !== barrier)
         : [...currentBarriers, barrier],
     );
+  };
+
+  const data = {
+    age: age,
+    gender: gender,
+    height: userHeight,
+    weight: weight,
+    goal: selectedGoals,
+    challenges: challenges,
+    importanceLevel: importanceLevel,
+    barriers: selectedBarriers,
+    challenges2: challenges2,
   };
 
   return (
@@ -77,14 +90,14 @@ function Goalscreen({navigation}) {
               <TextInput
                 style={styles.input}
                 placeholder="Age"
-                placeholderTextColor="#fff"
+                placeholderTextColor="gray"
                 value={age}
                 onChangeText={setAge}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Gender"
-                placeholderTextColor="#fff"
+                placeholderTextColor="gray"
                 value={gender}
                 onChangeText={setGender}
               />
@@ -93,14 +106,14 @@ function Goalscreen({navigation}) {
               <TextInput
                 style={styles.input}
                 placeholder="Height"
-                placeholderTextColor="#fff"
-                value={height}
+                placeholderTextColor="gray"
+                value={userHeight}
                 onChangeText={setHeight}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Weight"
-                placeholderTextColor="#fff"
+                placeholderTextColor="gray"
                 value={weight}
                 onChangeText={setWeight}
               />
@@ -131,8 +144,9 @@ function Goalscreen({navigation}) {
           <View style={styles.forpad2}>
             <TextInput
               style={styles.textarea}
-              placeholder="Tell us more about your fitness goals....."
-              placeholderTextColor="#fff"
+              placeholder="Tell us more about your fitness goals..."
+              placeholderTextColor="gray"
+              numberOfLines={3}
               value={challenges}
               onChangeText={setChallenges}
             />
@@ -148,7 +162,7 @@ function Goalscreen({navigation}) {
               <TextInput
                 style={styles.input}
                 placeholder="1-10"
-                placeholderTextColor="#fff"
+                placeholderTextColor="gray"
                 value={importanceLevel}
                 onChangeText={setImportanceLevel}
               />
@@ -186,28 +200,16 @@ function Goalscreen({navigation}) {
             <TextInput
               style={styles.textarea}
               placeholder="Tell us more about the challenges you need to overcome to reach your fitness goals..."
-              placeholderTextColor="#fff"
-              value={challenges}
-              onChangeText={setChallenges}
+              placeholderTextColor="gray"
+              value={challenges2}
+              numberOfLines={3}
+              onChangeText={setChallenges2}
             />
           </View>
           <View style={styles.forpad2}>
             <TouchableOpacity
-              style={{flexDirection: 'row', justifyContent: 'center'}}
-              onPress={() =>
-                navigation.navigate('Goalscrnsec', {
-                  selectedGoals: selectedGoals,
-                  selectedBarriers: selectedBarriers,
-                  additionalInfo: {
-                    age: age,
-                    gender: gender,
-                    height: height,
-                    weight: weight,
-                    importanceLevel: importanceLevel,
-                    challenges: challenges,
-                  },
-                })
-              }>
+              style={{alignSelf: 'center'}}
+              onPress={() => navigation.navigate('Goalscrnsec', {data: data})}>
               <Text style={styles.button}>Continue</Text>
             </TouchableOpacity>
           </View>
@@ -260,10 +262,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: calculateFontSize(15),
     color: '#fff',
-    paddingHorizontal: 8,
-    textAlign: 'center',
+    paddingLeft: 16,
+    textAlignVertical: 'top',
+    // paddingHorizontal: ,
+    textAlign: 'left',
     marginVertical: 25,
-    height: height * 0.09,
+    // height: height * 0.09,
   },
   button: {
     backgroundColor: '#a2e7f2',

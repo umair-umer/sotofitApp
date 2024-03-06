@@ -15,35 +15,33 @@ import {calculateFontSize} from '../../Config/font';
 
 const {width, height} = Dimensions.get('window');
 
-function Goalfourthscreen({navigation}) {
+function Goalfourthscreen({navigation, route}) {
   const [selectedFlexibility, setSelectedFlexibility] = useState('');
-  const [selectedJobCondition, setSelectedJobCondition] = useState('');
   const [selectedEnergyTime, setSelectedEnergyTime] = useState('');
   const [occupation, setOccupation] = useState('');
   const [jobConditionDetails, setJobConditionDetails] = useState('');
+  const [allowJobs, setallowJobs] = useState('');
+  const [isIndex, setisIndex] = useState(null);
+  const userData = route.params?.data;
 
-  // Function to handle selection for the flexibility question
+  const JobAllow = [
+    'Extended Periods of Sitting',
+    'Extended Periods of Sitting',
+    'Extended Periods of Repetitive Movement',
+  ];
+
   const handleFlexibilitySelection = option => {
     setSelectedFlexibility(prevSelection =>
       prevSelection === option ? '' : option,
     );
   };
 
-  // Function to handle selection for the job condition question
-  const handleJobConditionSelection = option => {
-    setSelectedJobCondition(prevSelection =>
-      prevSelection === option ? '' : option,
-    );
-  };
-
-  // Function to handle selection for the most energized time of day question
   const handleEnergyTimeSelection = option => {
     setSelectedEnergyTime(prevSelection =>
       prevSelection === option ? '' : option,
     );
   };
 
-  // Simplifying the display of options with a single function
   const renderOption = (optionText, selectedState, selectionHandler) => (
     <TouchableOpacity
       style={[
@@ -62,7 +60,6 @@ function Goalfourthscreen({navigation}) {
     </TouchableOpacity>
   );
 
-  // Simplifying the display of options with a single function
   const renderEnergizedTimeOption = optionText => (
     <TouchableOpacity
       style={[
@@ -81,6 +78,18 @@ function Goalfourthscreen({navigation}) {
       </Text>
     </TouchableOpacity>
   );
+
+  const handleContinue = () => {
+    const data = {
+      ...userData,
+      selectedFlexibility: selectedFlexibility,
+      occupation: occupation,
+      allowJobs: allowJobs,
+      jobConditionDetails: jobConditionDetails,
+      selectedEnergyTime: selectedEnergyTime,
+    };
+    navigation.navigate('Goalsrnfive', {data: data});
+  };
 
   return (
     <SafeAreaView>
@@ -126,39 +135,43 @@ function Goalfourthscreen({navigation}) {
             <TextInput
               style={styles.textarea}
               placeholder="What is your occupation?"
-              placeholderTextColor="#fff"
+              placeholderTextColor="gray"
               value={occupation}
+              numberOfLines={2}
               onChangeText={setOccupation}
             />
           </View>
           <View style={styles.forpad2}>
             <Text style={styles.information}>DOES YOUR JOB ALLOW FOR?</Text>
-            <View style={styles.forinputs}>
-              <TouchableOpacity style={styles.inputbuttons}>
-                <Text style={styles.inputbutton}>
-                  Extended Periods of Sitting
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.forinputs}>
-              <TouchableOpacity style={styles.inputbuttons}>
-                <Text style={styles.inputbutton}>
-                  Extended Periods of Sitting
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.forinputs}>
-              <TouchableOpacity style={styles.inputbuttons}>
-                <Text style={styles.inputbutton}>
-                  Extended Periods of Repetitive Movement
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {JobAllow.map((v, i) => {
+              return (
+                <View style={styles.forinputs}>
+                  <TouchableOpacity
+                    style={[
+                      styles.inputbuttons,
+                      {backgroundColor: isIndex === i ? '#a2e7f2' : '#2f2b2b'},
+                    ]}
+                    onPress={() => {
+                      setisIndex(i);
+                      setallowJobs(v);
+                    }}>
+                    <Text
+                      style={[
+                        styles.inputbutton,
+                        {color: isIndex === i ? 'black' : '#fff'},
+                      ]}>
+                      {v}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
 
             <TextInput
               style={styles.textarea}
               placeholder="Please describe the above in more detail."
-              placeholderTextColor="#fff"
+              placeholderTextColor="gray"
+              numberOfLines={2}
               value={jobConditionDetails}
               onChangeText={setJobConditionDetails}
             />
@@ -179,15 +192,7 @@ function Goalfourthscreen({navigation}) {
           <View style={styles.forpad2}>
             <TouchableOpacity
               style={{flexDirection: 'row', justifyContent: 'center'}}
-              onPress={() =>
-                navigation.navigate('Goalsrnfive', {
-                  selectedFlexibility,
-                  selectedJobCondition,
-                  selectedEnergyTime,
-                  occupation,
-                  jobConditionDetails,
-                })
-              }>
+              onPress={handleContinue}>
               <Text style={styles.button}>Continue</Text>
             </TouchableOpacity>
           </View>
@@ -217,8 +222,9 @@ const styles = StyleSheet.create({
   },
   information: {
     color: '#6f6868',
-    fontSize: calculateFontSize(16),
+    fontSize: calculateFontSize(14),
     marginTop: height * 0.008,
+    marginVertical: 10,
   },
   input: {
     backgroundColor: '#2f2b2b',
@@ -240,9 +246,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: calculateFontSize(15),
     color: '#fff',
-    paddingHorizontal: width * 0.04,
-    marginVertical: width * 0.04,
-    height: height * 0.09,
+    marginVertical: 25,
+    textAlignVertical: 'top',
+    textAlign: 'left',
+    paddingLeft: 13,
   },
   button: {
     backgroundColor: '#a2e7f2',

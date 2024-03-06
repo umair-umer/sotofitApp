@@ -16,28 +16,24 @@ import {calculateFontSize} from '../../Config/font';
 import Images from '../../Config/im';
 
 function Goalsecscreen({navigation, route}) {
-  const {selectedGoals, selectedBarriers, additionalInfo} = route.params;
-  const {age, gender, height, weight, importanceLevel, challenges} =
-    additionalInfo;
   const [selectedReadiness, setSelectedReadiness] = useState('');
   const [confidenceLevel, setConfidenceLevel] = useState('');
+  const userData = route.params?.data;
   const [motivationScores, setMotivationScores] = useState({
     'Seeing Results': '',
     'Being Held Accountable': '',
     'Praises/Rewards': '',
     'Having Fun': '',
     'Feeling better about yourself': '',
-    Other: '',
+    'Other (explain below)': '',
   });
   const [otherMotivation, setOtherMotivation] = useState('');
-
   const readinessOptions = [
     "I'm ready now",
     'I want to change soon',
     'I already start making changes',
     "I want to change, but don't think I can",
   ];
-
   const handleMotivationScoreChange = (key, value) => {
     setMotivationScores(prevState => ({
       ...prevState,
@@ -46,18 +42,14 @@ function Goalsecscreen({navigation, route}) {
   };
 
   const handleContinue = () => {
-    const motivationData = {
+    const data = {
+      ...userData,
       readiness: selectedReadiness,
       confidenceLevel: confidenceLevel,
       motivationScores: motivationScores,
       otherMotivation: otherMotivation,
     };
-    navigation.navigate('Goalsrnhrd', {
-      selectedGoals,
-      selectedBarriers,
-      additionalInfo,
-      motivationData,
-    });
+    navigation.navigate('Goalsrnhrd', {data: data});
   };
 
   return (
@@ -84,7 +76,7 @@ function Goalsecscreen({navigation, route}) {
                   style={[
                     styles.input,
                     selectedReadiness === option ? styles.selectedInput : {},
-                    {margin: width * 0.008}, // Ensure even spacing around each item
+                    {margin: width * 0.008},
                   ]}
                   onPress={() => setSelectedReadiness(option)}>
                   <Text
@@ -111,7 +103,8 @@ function Goalsecscreen({navigation, route}) {
               <TextInput
                 style={styles.input}
                 placeholder="1-10"
-                placeholderTextColor="#fff"
+                value={confidenceLevel}
+                placeholderTextColor="gray"
                 onChangeText={value => setConfidenceLevel(value)}
               />
             </View>
@@ -127,7 +120,7 @@ function Goalsecscreen({navigation, route}) {
                   <TextInput
                     style={styles.input}
                     placeholder="1-10"
-                    placeholderTextColor="#fff"
+                    placeholderTextColor="gray"
                     onChangeText={value =>
                       handleMotivationScoreChange(motivation, value)
                     }
@@ -135,22 +128,16 @@ function Goalsecscreen({navigation, route}) {
                   <Text style={styles.infodata}>{motivation}</Text>
                 </View>
               ))}
-              <View style={{flexDirection: 'row', marginTop: 10}}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="1-10"
-                  placeholderTextColor="#fff"
-                  onChangeText={value => setOtherMotivation(value)}
-                />
-                <Text style={styles.infodata}>Other (explain below)</Text>
-              </View>
             </View>
           </View>
           <View style={styles.forpad2}>
             <TextInput
               style={styles.textarea}
               placeholder="What else motivates you?"
-              placeholderTextColor="#fff"
+              placeholderTextColor="gray"
+              numberOfLines={3}
+              value={otherMotivation}
+              onChangeText={setOtherMotivation}
             />
           </View>
           <View style={styles.forpad2}>
@@ -216,9 +203,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: calculateFontSize(15),
     color: '#fff',
-    paddingHorizontal: 8,
+    paddingLeft: 16,
     marginVertical: 25,
-    height: height * 0.09,
+    textAlignVertical: 'top',
+    textAlign: 'left',
+    // height: height * 0.09,
   },
   button: {
     backgroundColor: '#a2e7f2',
@@ -235,8 +224,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: calculateFontSize(15),
     paddingTop: height * 0.008,
-    display: 'block',
-    paddingHorizontal: width * 0.05
+    paddingHorizontal: width * 0.05,
   },
 });
 

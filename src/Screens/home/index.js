@@ -24,11 +24,14 @@ import {Loader} from '../../Components/loder';
 import axios from 'axios';
 import {baseUrl} from '../../Config/baseurl';
 const imageSize = width * 0.18;
+
 export const Home = ({navigation}) => {
   const [load, setloader] = useState();
   const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
   const token = useSelector(state => state.authToken);
   const [searchQuery, setSearchQuery] = useState('');
+  const [Error, setError] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
       setloader(true);
@@ -47,7 +50,7 @@ export const Home = ({navigation}) => {
         console.log(profileData, 'poiuhy');
         setError('');
       } catch (err) {
-        console.error('Error fetching profile data:', err);
+        console.log('Error fetching profile data:', err);
         setError('An error occurred while fetching profile data.');
       } finally {
         setloader(false);
@@ -105,7 +108,7 @@ export const Home = ({navigation}) => {
   const days = ['Today', 'Tue.', 'Wed.', 'Thurs.', 'Fri.'];
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <>
       {load ? (
         <Loader />
       ) : (
@@ -113,169 +116,173 @@ export const Home = ({navigation}) => {
           colors={['#F855D2', '#E62FFA91', '#FC093ABA']}
           style={styles.container}>
           <SafeAreaView style={styles.safeArea}>
-            <TouchableOpacity
-              style={styles.logoutButtonContainer}
-              onPress={handleLogout}>
-              <Text style={styles.logout}>Logout</Text>
-            </TouchableOpacity>
-            <View style={styles.header}>
-              <View style={styles.hedsubcontainer}>
-                <TouchableOpacity
-                  style={styles.imgcontainer}
-                  onPress={() => navigation.navigate('profilescreen')}>
-                  <Image
-                    style={{width: '100%', height: '100%'}}
-                    resizeMode="cover"
-                    source={Images.profilepicture}
-                  />
-                </TouchableOpacity>
-                <View style={styles.subhedparentchild}>
-                  <Text style={styles.heloo}>hello</Text>
-                  <Text style={styles.name}>jhon Adams</Text>
-                  <Text style={styles.datetime}>Monday, Sep 21,2023</Text>
+            <ScrollView>
+              <TouchableOpacity
+                style={styles.logoutButtonContainer}
+                onPress={handleLogout}>
+                <Text style={styles.logout}>Logout</Text>
+              </TouchableOpacity>
+              <View style={styles.header}>
+                <View style={styles.hedsubcontainer}>
+                  <TouchableOpacity
+                    style={styles.imgcontainer}
+                    onPress={() => navigation.navigate('profilescreen')}>
+                    <Image
+                      style={{width: '100%', height: '100%'}}
+                      resizeMode="cover"
+                      source={Images.profilepicture}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.subhedparentchild}>
+                    <Text style={styles.heloo}>hello</Text>
+                    <Text style={styles.name}>jhon Adams</Text>
+                    <Text style={styles.datetime}>Monday, Sep 21,2023</Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    borderRadius: 100,
+                    padding: 5,
+                  }}>
+                  <Ionicons size={15} color="#fff" name="notifications" />
                 </View>
               </View>
               <View
                 style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                  borderRadius: 100,
-                  padding: 5,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginVertical: height * 0.03,
                 }}>
-                <Ionicons size={15} color="#fff" name="notifications" />
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginVertical: height * 0.03,
-              }}>
-              <View style={styles.Searchcontainer}>
-                <TouchableOpacity style={styles.iconContainer}>
-                  <Icon name="search" size={20} color="#fff" />
-                </TouchableOpacity>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Search..."
-                  placeholderTextColor="#fff"
-                  onChangeText={handleSearch}
-                  value={searchQuery}
-                  keyboardType="default" // set the keyboard type as needed
-                  returnKeyType="search" // the return key on the keyboard will show 'search'
+                <View style={styles.Searchcontainer}>
+                  <TouchableOpacity style={styles.iconContainer}>
+                    <Icon name="search" size={20} color="#fff" />
+                  </TouchableOpacity>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Search..."
+                    placeholderTextColor="#fff"
+                    onChangeText={handleSearch}
+                    value={searchQuery}
+                    keyboardType="default" // set the keyboard type as needed
+                    returnKeyType="search" // the return key on the keyboard will show 'search'
+                  />
+                </View>
+                <Feather
+                  name="sliders"
+                  color={'white'}
+                  size={30}
+                  style={{
+                    backgroundColor: 'rgba(162, 231, 242, 1)',
+                    padding: 10,
+                    borderRadius: 10,
+                    ...Platform.select({
+                      ios: {
+                        backgroundColor: 'rgba(162, 231, 242, 1)',
+                        padding: 6,
+                        overflow: 'hidden',
+                        borderRadius: 10,
+                      },
+                    }),
+                  }}
                 />
               </View>
-              <Feather
-                name="sliders"
-                color={'white'}
-                size={30}
-                style={{
-                  backgroundColor: 'rgba(162, 231, 242, 1)',
-                  padding: 10,
-                  borderRadius: 10,
-                  ...Platform.select({
-                    ios: {
-                      backgroundColor: 'rgba(162, 231, 242, 1)',
-                      padding: 6,
-                      overflow: 'hidden',
-                      borderRadius: 10,
-                    },
-                  }),
-                }}
-              />
-            </View>
 
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.crdcontainer}>
-                  <TouchableOpacity style={styles.imageContainer}>
-                    <Image
-                      source={Images.profilepicture} // Replace with your image path
-                      style={styles.image}
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.text}>SotoFits Workouts</Text>
-                </View>
-                <View style={styles.crdcontainer}>
-                  <TouchableOpacity style={styles.imageContainer}>
-                    <Image
-                      source={Images.profilepicture} // Replace with your image path
-                      style={styles.image}
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.text}>SotoEats Nutrition</Text>
-                </View>
-                <View style={styles.crdcontainer}>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View style={styles.crdcontainer}>
+                    <TouchableOpacity style={styles.imageContainer}>
+                      <Image
+                        source={Images.profilepicture} // Replace with your image path
+                        style={styles.image}
+                      />
+                    </TouchableOpacity>
+                    <Text style={styles.text}>SotoFits Workouts</Text>
+                  </View>
+                  <View style={styles.crdcontainer}>
+                    <TouchableOpacity style={styles.imageContainer}>
+                      <Image
+                        source={Images.profilepicture} // Replace with your image path
+                        style={styles.image}
+                      />
+                    </TouchableOpacity>
+                    <Text style={styles.text}>SotoEats Nutrition</Text>
+                  </View>
+                  <View style={styles.crdcontainer}>
+                    <TouchableOpacity
+                      style={styles.imageContainer}
+                      onPress={() => navigation.navigate('groceryscreen')}>
+                      <Image
+                        source={Images.profilepicture} // Replace with your image path
+                        style={styles.image}
+                      />
+                    </TouchableOpacity>
+                    <Text style={styles.text}>Calorie Counter</Text>
+                  </View>
+                  <View style={styles.crdcontainer}>
+                    <TouchableOpacity style={styles.imageContainer}>
+                      <Image
+                        source={Images.profilepicture} // Replace with your image path
+                        style={styles.image}
+                      />
+                    </TouchableOpacity>
+                    <Text style={styles.text}>Daily Motivation</Text>
+                  </View>
+                </ScrollView>
+              </View>
+              <View style={styles.dayscontainer}>
+                {days.map(day => (
                   <TouchableOpacity
-                    style={styles.imageContainer}
-                    onPress={() => navigation.navigate('groceryscreen')}>
-                    <Image
-                      source={Images.profilepicture} // Replace with your image path
-                      style={styles.image}
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.text}>Calorie Counter</Text>
-                </View>
-                <View style={styles.crdcontainer}>
-                  <TouchableOpacity style={styles.imageContainer}>
-                    <Image
-                      source={Images.profilepicture} // Replace with your image path
-                      style={styles.image}
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.text}>Daily Motivation</Text>
-                </View>
-              </ScrollView>
-            </View>
-            <View style={styles.dayscontainer}>
-              {days.map(day => (
-                <TouchableOpacity
-                  key={day}
-                  style={[
-                    styles.dayTab,
-                    activeDay === day && styles.activeDayTab,
-                  ]}
-                  onPress={() => setActiveDay(day)}>
-                  <Text
+                    key={day}
                     style={[
-                      styles.dayText,
-                      activeDay === day && styles.activeDayText,
-                    ]}>
-                    {day}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <Text style={styles.wrkistory}>Workout History</Text>
+                      styles.dayTab,
+                      activeDay === day && styles.activeDayTab,
+                    ]}
+                    onPress={() => setActiveDay(day)}>
+                    <Text
+                      style={[
+                        styles.dayText,
+                        activeDay === day && styles.activeDayText,
+                      ]}>
+                      {day}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <Text style={styles.wrkistory}>Workout History</Text>
 
-            <View style={styles.workoutcontainer}>
-              <View style={styles.header}>
-                <Text style={styles.headerText}>Today's Workout</Text>
-                <TouchableOpacity>
-                  <Text style={styles.seeAllButton}>See all</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.workoutCard}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('exercisescreen')}>
-                  <Image style={styles.workoutImage} source={Images.Body} />
-                </TouchableOpacity>
-                <Text style={styles.workoutTitle}>Strengthen Chest & Back</Text>
-                <Text style={styles.workoutSubtitle}>SotoFits Basic</Text>
-                <View style={styles.premiumTag}>
-                  <Text style={styles.premiumText}>Premium</Text>
+              <View style={styles.workoutcontainer}>
+                <View style={styles.header}>
+                  <Text style={styles.headerText}>Today's Workout</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.seeAllButton}>See all</Text>
+                  </TouchableOpacity>
                 </View>
-                <View style={styles.counter}>
-                  <Text style={styles.counterText}>812</Text>
+                <View style={styles.workoutCard}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('exercisescreen')}>
+                    <Image style={styles.workoutImage} source={Images.Body} />
+                  </TouchableOpacity>
+                  <Text style={styles.workoutTitle}>
+                    Strengthen Chest & Back
+                  </Text>
+                  <Text style={styles.workoutSubtitle}>SotoFits Basic</Text>
+                  <View style={styles.premiumTag}>
+                    <Text style={styles.premiumText}>Premium</Text>
+                  </View>
+                  <View style={styles.counter}>
+                    <Text style={styles.counterText}>812</Text>
+                  </View>
                 </View>
+                {/* Add more workout cards here */}
               </View>
-              {/* Add more workout cards here */}
-            </View>
+            </ScrollView>
           </SafeAreaView>
         </LinearGradient>
       )}
-    </ScrollView>
+    </>
   );
 };
 
