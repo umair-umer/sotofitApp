@@ -13,9 +13,12 @@ import {
 import Images from '../../Config/im';
 import {calculateFontSize} from '../../Config/font';
 import {useDispatch, useSelector} from 'react-redux';
-import {setAuthToken} from '../../../store/action/actions';
+import {setAuthToken, setIsAssessment} from '../../../store/action/actions';
 import axios from 'axios';
 import {baseUrl} from '../../Config/baseurl';
+import {Loader} from '../../Components/loder';
+import {showMessage} from 'react-native-flash-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width, height} = Dimensions.get('window');
 
@@ -23,60 +26,44 @@ function Goalsixthscreen({navigation, route}) {
   const userData = route.params?.data;
   const dispatch = useDispatch();
   const token = useSelector(state => state.authToken);
-  dispatch(setAuthToken(token));
+  const [isLoading, setisLoading] = useState(false);
+  // dispatch(setAuthToken(token));
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [additionalDetails, setAdditionalDetails] = useState('');
+  const isAssessment = useSelector(state => state?.isAssessment);
+
+  // console.log('userData------->>>', userData);
 
   const handleSubmit = async () => {
+    setisLoading(true);
     const dataToSend = JSON.stringify({
       age: userData?.age,
       gender: userData?.gender,
       height: userData?.height,
       weight: userData?.weight,
-      buildMuscle: true,
-      improveFlexibility: false,
-      loseWeight: false,
-      gainWeight: false,
-      increaseEndurance: true,
-      improveDiet: false,
+      fitnessInfo: userData?.goal?.join(),
       fitnessGoalDesc: userData?.challenges,
       goalsImportance: userData?.importanceLevel,
-      energyLevel: false,
-      notEnoughTime: true,
-      barrierDiet: false,
-      barrierMotivation: true,
-      disabilityOrInjury: false,
-      costs: false,
+      barriers: userData?.barriers?.join(),
       barrierDesc: userData?.challenges2,
-      readyNow: true,
-      wantToChange: false,
-      startedChanges: false,
-      wantToChangeUnable: false,
+      lifeStyle: userData?.readiness,
       goalMotivation: userData?.confidenceLevel,
-      seeingResults: 10,
-      beingHeldAccountable: 8,
-      praiseOrRewards: 5,
-      havingFun: 7,
-      feelingBetterAboutYourself: 9,
+      seeingResults: userData?.motivationScores['Seeing Results'],
+      beingHeldAccountable:
+        userData?.motivationScores['Being Held Accountable'],
+      praiseOrRewards: userData?.motivationScores['Praises/Rewards'],
+      havingFun: userData?.motivationScores['Having Fun'],
+      feelingBetterAboutYourself:
+        userData?.motivationScores['Feeling better about yourself'],
       motivationOther: userData?.otherMotivation, //condition lagana hai
       exerciseFrequency: userData?.exercise,
-      weightLifting: true,
-      cardio: true,
-      strectching: false,
-      yoga: false,
-      hiit: false,
-      sports: true,
+      exerciseTypes: userData?.selectedExercises?.join(),
       exerciseTypeOther: userData?.otherExercise, //condition lagana hai
       exerciseDuration: userData?.timesExercises,
       runningFrequency: userData?.outDoors,
-      notEvenClose: false,
-      nearlyOrAlmost: false,
-      justBarely: true,
-      easily: false,
+      flexibility: userData?.selectedFlexibility,
       occupation: userData?.occupation,
-      extendedSitting: true,
-      extendedStanding: false,
-      repetitiveMovement: false,
+      jobAllow: userData?.allowJobs,
       jobDesc: userData?.jobConditionDetails,
       mostEnergizedTime: userData?.selectedEnergyTime,
       trackMeals: userData?.mealTracking,
@@ -85,34 +72,57 @@ function Goalsixthscreen({navigation, route}) {
       favoriteFoods: userData?.favoriteFood,
       dislikedFoods: userData?.diet,
       dietRestriction: userData?.allergires,
-      healthWellness: true,
-      competition: false,
-      workoutRoutine: true,
-      nutritionPlan: true,
-      calorieTracking: false,
-      lifestyleChange: true,
-      readyToGetFit: true,
+      instructorRef: selectedOptions?.join(),
       instructorDesc: additionalDetails,
     });
 
-    console.log('userComplete details--------->', JSON.parse(dataToSend));
-    // try {
-    //   let response = await axios
-    //     .post(`${baseUrl}/mobile/home/assessment`, dataToSend, {
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     })
-    //     .then(res => {
-    //       console.log('response submit assessment', res.data);
-    //     })
-    //     .catch(err => {
-    //       console.log('error submit assessment', err);
-    //     });
-    // } catch (e) {
-    //   console.log('catch error  in submitAssessment', e);
-    // }
+    // console.log('userComplete details--------->', JSON.parse(dataToSend));
+    try {
+      await axios
+        .post(`${baseUrl}/mobile/home/assessment`, dataToSend, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(async res => {
+          console.log('response submit assessment', res.data);
+          if (res.data.success) {
+            setisLoading(false);
+            navigation.navigate('home');
+            showMessage({
+              message: 'Successfully Submitted!',
+              icon: 'success',
+              type: 'success',
+              animated: true,
+              floating: true,
+            });
+          } else {
+            setisLoading(false);
+            showMessage({
+              message: 'Something went wrong! Please try again later.',
+              icon: 'warning',
+              type: 'warning',
+              animated: true,
+              floating: true,
+            });
+          }
+        })
+        .catch(err => {
+          setisLoading(false);
+          console.log('error submit assessment', err);
+        });
+    } catch (e) {
+      setisLoading(false);
+      console.log('catch error in submitAssessment', e);
+      showMessage({
+        message: 'Something went wrong! Please try again later.',
+        icon: 'danger',
+        type: 'danger',
+        animated: true,
+        floating: true,
+      });
+    }
   };
 
   const options = [
@@ -134,59 +144,62 @@ function Goalsixthscreen({navigation, route}) {
   };
 
   return (
-    <SafeAreaView>
-      <ImageBackground source={Images.Goal} style={styles.background}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.container}>
-          <View style={styles.forpad1}>
-            <Text style={styles.heading}>
-              <Text style={{fontStyle: 'italic'}}>SotoFits</Text> Personal
-              Fitness Assessment
-            </Text>
-          </View>
-          <View style={styles.forpad2}>
-            <Text style={styles.information}>
-              I AM SEEKING A SOTOFITS INSTRUCTOR FOR:
-            </Text>
-            <View style={{marginVertical: 16}}>
-              {options.map((option, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.inputbuttons,
-                    selectedOptions.includes(option) && styles.selectedInput,
-                    {marginBottom: 10},
-                  ]}
-                  onPress={() => toggleOption(option)}>
-                  <Text style={styles.inputbutton}>{option}</Text>
-                </TouchableOpacity>
-              ))}
+    <>
+      {isLoading && <Loader />}
+      <SafeAreaView>
+        <ImageBackground source={Images.Goal} style={styles.background}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
+            <View style={styles.forpad1}>
+              <Text style={styles.heading}>
+                <Text style={{fontStyle: 'italic'}}>SotoFits</Text> Personal
+                Fitness Assessment
+              </Text>
             </View>
-          </View>
-          <View style={styles.forpad2}>
-            <Text style={styles.information}>
-              PROVIDE ANY ADDITIONAL DETAILS ABOUT YOUR SELECTIONS ABOVE.
-            </Text>
-            <TextInput
-              placeholder="PROVIDE ANY ADDITIONAL DETAILS ABOUT YOUR SELECTIONS ABOVE"
-              placeholderTextColor={'gray'}
-              style={styles.textarea}
-              onChangeText={setAdditionalDetails}
-              value={additionalDetails}
-              numberOfLines={2}
-            />
-          </View>
-          <View style={styles.forpad2}>
-            <TouchableOpacity
-              style={{flexDirection: 'row', justifyContent: 'center'}}
-              onPress={handleSubmit}>
-              <Text style={styles.button}>Finish</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </ImageBackground>
-    </SafeAreaView>
+            <View style={styles.forpad2}>
+              <Text style={styles.information}>
+                I AM SEEKING A SOTOFITS INSTRUCTOR FOR:
+              </Text>
+              <View style={{marginVertical: 16}}>
+                {options.map((option, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.inputbuttons,
+                      selectedOptions.includes(option) && styles.selectedInput,
+                      {marginBottom: 10},
+                    ]}
+                    onPress={() => toggleOption(option)}>
+                    <Text style={styles.inputbutton}>{option}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+            <View style={styles.forpad2}>
+              <Text style={styles.information}>
+                PROVIDE ANY ADDITIONAL DETAILS ABOUT YOUR SELECTIONS ABOVE.
+              </Text>
+              <TextInput
+                placeholder="PROVIDE ANY ADDITIONAL DETAILS ABOUT YOUR SELECTIONS ABOVE"
+                placeholderTextColor={'gray'}
+                style={styles.textarea}
+                onChangeText={setAdditionalDetails}
+                value={additionalDetails}
+                numberOfLines={2}
+              />
+            </View>
+            <View style={styles.forpad2}>
+              <TouchableOpacity
+                style={{flexDirection: 'row', justifyContent: 'center'}}
+                onPress={handleSubmit}>
+                <Text style={styles.button}>Finish</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </ImageBackground>
+      </SafeAreaView>
+    </>
   );
 }
 

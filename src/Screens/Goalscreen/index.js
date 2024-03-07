@@ -252,6 +252,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginRight: width * 0.03,
     marginVertical: height * 0.008,
+    textTransform: 'capitalize',
   },
   forinputs: {
     flexDirection: 'row',

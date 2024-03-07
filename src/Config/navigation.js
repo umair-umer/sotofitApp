@@ -32,11 +32,10 @@ function navigation() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         {token ? (
-          // If token exists, go directly to the Home screen
           <>
-            <Stack.Screen name="getstarted" component={Introsliderscreen} />
-            <Stack.Screen name="introslider" component={Introsliderscreen} />
             <Stack.Screen name="home" component={Home} />
+            <Stack.Screen name="getstarted" component={Introsliderscreen} />
+            {/* <Stack.Screen name="introslider" component={Introsliderscreen} /> */}
             <Stack.Screen name="Goalscrn" component={Goalscreen} />
             <Stack.Screen name="Goalscrnsec" component={Goalsecscreen} />
             <Stack.Screen name="Goalsrnhrd" component={Goalthirdscreen} />
@@ -46,7 +45,10 @@ function navigation() {
             <Stack.Screen name="profilescreen" component={ProfileScreen} />
             <Stack.Screen name="Editproscreen" component={EditScreen} />
             <Stack.Screen name="Reseverscreen" component={Purchasescreen} />
-            <Stack.Screen name="pucahsescreen" component={PaymentOptionsScreen} />
+            <Stack.Screen
+              name="pucahsescreen"
+              component={PaymentOptionsScreen}
+            />
             <Stack.Screen name="checkoutscreen" component={Checkout} />
             <Stack.Screen name="exercisescreen" component={Exercisescreen} />
             <Stack.Screen name="groceryscreen" component={Grocerylistscreen} />
@@ -56,10 +58,8 @@ function navigation() {
             <Stack.Screen name="breakfast" component={Breakfastscreen} />
           </>
         ) : (
-          // Otherwise, go to the intro slider screen
           <>
             <Stack.Screen name="createprofilescreen" component={Signupscreen} />
-            {/* Include the Home screen here too so the navigation stack works correctly */}
           </>
         )}
       </Stack.Navigator>

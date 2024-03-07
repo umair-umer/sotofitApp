@@ -26,6 +26,11 @@ import PROTEIN1 from '../Assests/protein1.png'
 import PROTEIN2 from '../Assests/protein2.png'
 import PROTEIN3 from '../Assests/protein3.png'
 import BREAKFASTGRAPH from '../Assests/breakfastgraph.png'
+import FOOD from '../Assests/foodeat.png'
+import TWOBUILD from '../Assests/workouts.png'
+import KNIFE from '../Assests/cutler.png'
+import FIRECIRCLE from '../Assests/motivate.png'
+import UMAIR from '../Assests/calries.png'
 
 const Images = {
     
@@ -56,6 +61,11 @@ const Images = {
     PROTEIN2,
     PROTEIN3,
     BREAKFASTGRAPH,
+    FOOD,
+    TWOBUILD,
+    KNIFE,
+    FIRECIRCLE,
+    UMAIR,
 }
 
 

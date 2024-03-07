@@ -82,7 +82,7 @@ function Goalthirdscreen({navigation, route}) {
             </Text>
             <TextInput
               style={styles.exerciseInput}
-              placeholder="1-10"
+              placeholder="1-7"
               placeholderTextColor="gray"
               value={exercise}
               onChangeText={setExercise}
@@ -161,7 +161,7 @@ function Goalthirdscreen({navigation, route}) {
             <View style={styles.forinputs}>
               <TextInput
                 style={styles.exerciseInput}
-                placeholder="1-10"
+                placeholder="1-7"
                 placeholderTextColor="gray"
                 onChangeText={setoutDoors}
                 value={outDoors}

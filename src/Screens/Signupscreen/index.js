@@ -58,7 +58,7 @@ function Signupscreen({navigation}) {
         // const assisment =response.data.user.assesment
         // Dispatch action to save token
         dispatch(setAuthToken(token));
-        navigation.navigate("introslider")
+        navigation.navigate("getstarted")
       })
       .catch((error) => {
         console.error(error); 

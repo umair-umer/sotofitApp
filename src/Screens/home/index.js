@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   Platform,
+  ImageBackground,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,6 +19,7 @@ import {calculateFontSize} from '../../Config/font';
 import {useDispatch, useSelector} from 'react-redux';
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import {clearAuthToken} from '../../../store/action/actions';
 import {Loader} from '../../Components/loder';
@@ -26,10 +28,12 @@ import {baseUrl} from '../../Config/baseurl';
 const imageSize = width * 0.18;
 
 export const Home = ({navigation}) => {
+  
   const [load, setloader] = useState();
   const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
   const token = useSelector(state => state.authToken);
   const [searchQuery, setSearchQuery] = useState('');
+  const [profileData, setProfileData] = useState('');
   const [Error, setError] = useState('');
 
   useEffect(() => {
@@ -116,7 +120,7 @@ export const Home = ({navigation}) => {
           colors={['#F855D2', '#E62FFA91', '#FC093ABA']}
           style={styles.container}>
           <SafeAreaView style={styles.safeArea}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
               <TouchableOpacity
                 style={styles.logoutButtonContainer}
                 onPress={handleLogout}>
@@ -135,7 +139,7 @@ export const Home = ({navigation}) => {
                   </TouchableOpacity>
                   <View style={styles.subhedparentchild}>
                     <Text style={styles.heloo}>hello</Text>
-                    <Text style={styles.name}>jhon Adams</Text>
+                    <Text style={styles.name}>{profileData.firstName}</Text>
                     <Text style={styles.datetime}>Monday, Sep 21,2023</Text>
                   </View>
                 </View>
@@ -195,8 +199,8 @@ export const Home = ({navigation}) => {
                   <View style={styles.crdcontainer}>
                     <TouchableOpacity style={styles.imageContainer}>
                       <Image
-                        source={Images.profilepicture} // Replace with your image path
-                        style={styles.image}
+                        source={Images.TWOBUILD} // Replace with your image path
+                        style={styles.imageuppersmall}
                       />
                     </TouchableOpacity>
                     <Text style={styles.text}>SotoFits Workouts</Text>
@@ -204,8 +208,8 @@ export const Home = ({navigation}) => {
                   <View style={styles.crdcontainer}>
                     <TouchableOpacity style={styles.imageContainer}>
                       <Image
-                        source={Images.profilepicture} // Replace with your image path
-                        style={styles.image}
+                        source={Images.KNIFE} // Replace with your image path
+                        style={styles.imageuppersmall}
                       />
                     </TouchableOpacity>
                     <Text style={styles.text}>SotoEats Nutrition</Text>
@@ -215,8 +219,8 @@ export const Home = ({navigation}) => {
                       style={styles.imageContainer}
                       onPress={() => navigation.navigate('groceryscreen')}>
                       <Image
-                        source={Images.profilepicture} // Replace with your image path
-                        style={styles.image}
+                        source={Images.FIRECIRCLE} // Replace with your image path
+                        style={styles.imageuppersmall}
                       />
                     </TouchableOpacity>
                     <Text style={styles.text}>Calorie Counter</Text>
@@ -224,8 +228,8 @@ export const Home = ({navigation}) => {
                   <View style={styles.crdcontainer}>
                     <TouchableOpacity style={styles.imageContainer}>
                       <Image
-                        source={Images.profilepicture} // Replace with your image path
-                        style={styles.image}
+                        source={Images.UMAIR} // Replace with your image path
+                        style={styles.imageuppersmall}
                       />
                     </TouchableOpacity>
                     <Text style={styles.text}>Daily Motivation</Text>
@@ -252,31 +256,96 @@ export const Home = ({navigation}) => {
                 ))}
               </View>
               <Text style={styles.wrkistory}>Workout History</Text>
-
-              <View style={styles.workoutcontainer}>
+            <View style={styles.workoutcontainer}>
+              <View style={styles.header}>
+                <Text style={styles.headerText}>Today's Workout</Text>
+                <TouchableOpacity>
+                  <Text style={styles.seeAllButton}>See all</Text>
+                </TouchableOpacity>
+              </View>
+                <View style={styles.exercisemain}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <TouchableOpacity onPress={() => navigation.navigate('exercisescreen')}>
+                      <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
+                      <View style={styles.lock}>
+                       <Entypo
+                        name='lock'
+                        size={15}
+                        color='#000000A1'
+                        />
+                       </View>
+                        <View style={styles.mainslidercontent}>
+                          <Text style={styles.sliderhead}>Strengthen Chest & Back</Text>
+                          <Text style={styles.slidertext}>SotoFits Basic</Text>
+                        </View>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                    <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
+                      <View style={styles.premium}>
+                        <Text style={styles.premiumText}>Premium</Text>
+                      </View>
+                      <View style={styles.mainslidercontent}>
+                        <Text style={styles.sliderhead}>Cardio Training</Text>
+                        <Text style={styles.slidertext}>SotoFits Basic</Text>
+                      </View>
+                    </ImageBackground>
+                    <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
+                    <View style={styles.lock}>
+                       <Entypo
+                        name='lock'
+                        size={15}
+                        color='#000000A1'
+                        />
+                       </View>
+                      <View style={styles.mainslidercontent}>
+                        <Text style={styles.sliderhead}>Cardio Training</Text>
+                        <Text style={styles.slidertext}>SotoFits Basic</Text>
+                      </View>
+                    </ImageBackground>
+                  </ScrollView>
+                </View>
                 <View style={styles.header}>
-                  <Text style={styles.headerText}>Today's Workout</Text>
-                  <TouchableOpacity>
-                    <Text style={styles.seeAllButton}>See all</Text>
-                  </TouchableOpacity>
+                <Text style={styles.headerText2}>Today's Nutrition</Text>
+              </View>
+                <View style={styles.exercisemain}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      <ImageBackground source={Images.FOOD} style={styles.exerciseone}>
+                       <View style={styles.lock}>
+                       <Entypo
+                        name='lock'
+                        size={15}
+                        color='#000000A1'
+                        />
+                       </View>
+                        <View style={styles.mainslidercontent}>
+                          <Text style={styles.sliderhead}>Dinner</Text>
+                          <Text style={styles.slidertext}>SotoFits Basic</Text>
+                        </View>
+                      </ImageBackground>
+                    <ImageBackground source={Images.FOOD} style={styles.exerciseone}>
+                    <View style={styles.premium}>
+                        <Text style={styles.premiumText}>Premium</Text>
+                      </View>
+                      <View style={styles.mainslidercontent}>
+                        <Text style={styles.sliderhead}>Breakfast</Text>
+                        <Text style={styles.slidertext}>SotoFits Basic</Text>
+                      </View>
+                    </ImageBackground>
+                    <ImageBackground source={Images.FOOD} style={styles.exerciseone}>
+                    <View style={styles.lock}>
+                       <Entypo
+                        name='lock'
+                        size={15}
+                        color='#000000A1'
+                        />
+                       </View>
+                      <View style={styles.mainslidercontent}>
+                        <Text style={styles.sliderhead}>Lunch</Text>
+                        <Text style={styles.slidertext}>SotoFits Basic</Text>
+                      </View>
+                    </ImageBackground>
+                  </ScrollView>
                 </View>
-                <View style={styles.workoutCard}>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('exercisescreen')}>
-                    <Image style={styles.workoutImage} source={Images.Body} />
-                  </TouchableOpacity>
-                  <Text style={styles.workoutTitle}>
-                    Strengthen Chest & Back
-                  </Text>
-                  <Text style={styles.workoutSubtitle}>SotoFits Basic</Text>
-                  <View style={styles.premiumTag}>
-                    <Text style={styles.premiumText}>Premium</Text>
-                  </View>
-                  <View style={styles.counter}>
-                    <Text style={styles.counterText}>812</Text>
-                  </View>
-                </View>
-                {/* Add more workout cards here */}
               </View>
             </ScrollView>
           </SafeAreaView>
@@ -287,6 +356,10 @@ export const Home = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  imageuppersmall: {
+    width: width * 0.1,
+    height: height * 0.06,
+  },
   container: {
     flex: 1,
     ...Platform.select({
@@ -563,4 +636,65 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: calculateFontSize(14),
   },
+  wrkistory: {
+    color: 'white',
+    fontSize: calculateFontSize(13),
+    marginLeft: width * 0.03,
+  },
+  workoutcontainer: {
+    padding: 16,
+  }, 
+exercisemain: {
+    marginVertical: height * 0.02,
+  },
+  exerciseone: {
+    width: 250,
+    height: 170,
+    resizeMode: 'cover',
+    marginRight: width * 0.06,
+    justifyContent:"flex-end",
+  },
+  mainslidercontent: {
+    backgroundColor: 'rgba(0, 0, 0, .6)',
+    paddingVertical: height * 0.01,
+    paddingHorizontal: width * 0.03,
+    borderRadius: 15,
+  },
+  sliderhead: {
+    fontSize: calculateFontSize(18),
+    fontWeight: '500',
+    color: '#fff',
+    paddingBottom: height * 0.003,
+  },
+  slidertext: {
+    fontSize: calculateFontSize(13),
+    color: 'rgba(231, 231, 231, .7)',
+  },
+  lock: {
+    padding: 6,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    position: 'absolute',
+    top: height * 0.02,
+    right: width * 0.03,
+  },
+  premium: {
+    backgroundColor: 'red',
+    borderRadius: 8,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: height * 0.003,
+    position: 'absolute',
+    top: height * 0.02,
+    left: width * 0.04,
+  },
+  premiumText: {
+    color: '#fff',
+    fontSize: calculateFontSize(12),
+  },
+  headerText2: {
+    fontSize: calculateFontSize(22),
+    color: '#FFFFFF',
+    marginTop: height * 0.04,
+  },
 });
+

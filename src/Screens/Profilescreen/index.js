@@ -1,12 +1,40 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Images from '../../Config/im'
 import { calculateFontSize } from '../../Config/font';
 const { width, height } = Dimensions.get('window');
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useSelector } from 'react-redux';
+import { baseUrl } from '../../Config/baseurl';
+import axios from 'axios';
 const ProfileScreen = ({navigation}) => {
+    const [profileData, setProfileData] = useState('');
+    const token = useSelector(state => state.authToken);
+    useEffect(() => {
+        const fetchData = async () => {
+          const config = {
+            method: 'get',
+            url: `${baseUrl}/auth/profile`,
+            headers: {
+              Authorization: `Bearer ${token}`, // Use token from Redux store
+            },
+          };
+    
+          try {
+            const response = await axios.request(config);
+            console.log('Profile data:', response.data.data);
+            setProfileData(response.data.data);
+            console.log(profileData, 'poiuhy');
+          } catch (err) {
+            console.log('Error fetching profile data:', err);
+          } 
+        };
+    
+        fetchData();
+      }, [token]);
+    
+
     return (
         <LinearGradient
             colors={['#F855D2', '#E62FFA91', '#FC093ABA']}
@@ -23,7 +51,7 @@ const ProfileScreen = ({navigation}) => {
                         source={Images.Profileimage}
                         style={styles.profileImage}
                     />
-                    <Text style={styles.name}>John Adams</Text>
+                    <Text style={styles.name}>{profileData.firstName}</Text>
                     <Text style={styles.phone}>+91 123-4567</Text>
                     <TouchableOpacity style={styles.editButton}
                      onPress={()=>navigation.navigate('Editproscreen')}>
@@ -96,6 +124,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginVertical: height * 0.006,
         color: '#fff',
+        textTransform:"capitalize"
     },
     phone: {
         fontSize: 18,

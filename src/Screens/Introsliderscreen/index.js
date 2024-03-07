@@ -31,14 +31,14 @@ const Introsliderscreen = ({navigation}) => {
         </View>
 
         <View style={styles.btns}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.assembtn}
-            onPress={()=>navigation.navigate('Goalscrn')}
-            >
+            onPress={() => navigation.navigate('Goalscrn')}>
             <Text style={styles.btntxt}>Take Assessment</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.linktxt} 
-          onPress={()=>navigation.navigate('home')}>
+          <TouchableOpacity
+            style={styles.linktxt}
+            onPress={() => navigation.navigate('home')}>
             <Text style={styles.txtlink}>Skip assessment for now</Text>
           </TouchableOpacity>
         </View>

@@ -115,19 +115,27 @@ function Goalsecscreen({navigation, route}) {
               MOTIVATE YOU?
             </Text>
             <View style={{flexDirection: 'column', marginTop: 10}}>
-              {Object.keys(motivationScores).map((motivation, index) => (
-                <View key={index} style={{flexDirection: 'row', marginTop: 10}}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="1-10"
-                    placeholderTextColor="gray"
-                    onChangeText={value =>
-                      handleMotivationScoreChange(motivation, value)
-                    }
-                  />
-                  <Text style={styles.infodata}>{motivation}</Text>
-                </View>
-              ))}
+              {Object.keys(motivationScores).map((motivation, index) => {
+                // console.log(
+                //   'motivation=====?>>>>',
+                //   motivationScores['Being Held Accountable'],
+                // );
+                return (
+                  <View
+                    key={index}
+                    style={{flexDirection: 'row', marginTop: 10}}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="1-10"
+                      placeholderTextColor="gray"
+                      onChangeText={value =>
+                        handleMotivationScoreChange(motivation, value)
+                      }
+                    />
+                    <Text style={styles.infodata}>{motivation}</Text>
+                  </View>
+                );
+              })}
             </View>
           </View>
           <View style={styles.forpad2}>

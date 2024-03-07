@@ -1,12 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Images from '../../Config/im'
 import { calculateFontSize } from '../../Config/font';
 const { width, height } = Dimensions.get('window');
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { baseUrl } from '../../Config/baseurl';
 const EditScreen = ({navigation}) => {
+
+    const [profileData, setProfileData] = useState('');
+    const token = useSelector(state => state.authToken);
+    useEffect(() => {
+        const fetchData = async () => {
+          const config = {
+            method: 'get',
+            url: `${baseUrl}/auth/profile`,
+            headers: {
+              Authorization: `Bearer ${token}`, // Use token from Redux store
+            },
+          };
+    
+          try {
+            const response = await axios.request(config);
+            console.log('Profile data:', response.data.data);
+            setProfileData(response.data.data);
+            console.log(profileData, 'poiuhy');
+          } catch (err) {
+            console.log('Error fetching profile data:', err);
+          } 
+        };
+    
+        fetchData();
+      }, [token]);
     return (
         <LinearGradient
             colors={['#F855D2', '#E62FFA91', '#FC093ABA']}
@@ -18,7 +45,7 @@ const EditScreen = ({navigation}) => {
                         source={Images.Profileimage}
                         style={styles.profileImage}
                     />
-                    <Text style={styles.name}>John Adams</Text>
+                    <Text style={styles.name}>{profileData.firstName}</Text>
                     <TouchableOpacity style={styles.changephoto}>
                     <Text style={styles.photo}>Change Photo</Text>
                     </TouchableOpacity>
@@ -26,19 +53,19 @@ const EditScreen = ({navigation}) => {
                 <View style={styles.maininfo}>
                     <View style={styles.maininfoinner}>
                         <Text style={styles.infohead}>First Name</Text>
-                        <Text style={styles.info}>John</Text>
+                        <Text style={styles.info}>{profileData.firstName}</Text>
                     </View>
-                    <View style={styles.maininfoinner}>
+                    {/* <View style={styles.maininfoinner}>
                         <Text style={styles.infohead}>Last Name</Text>
                         <Text style={styles.info}>Adams</Text>
                     </View>
                     <View style={styles.maininfoinner}>
                         <Text style={styles.infohead}>Phone Number</Text>
                         <Text style={styles.info}>+1 000 777 8341</Text>
-                    </View>
+                    </View> */}
                     <View style={styles.maininfoinner}>
                         <Text style={styles.infohead}>Email</Text>
-                        <Text style={styles.info}>johnadams@gmail.com</Text>
+                        <Text style={styles.info}>{profileData.email}</Text>
                     </View>
                 </View>
                 <View style={styles.buttonmain}>
@@ -49,14 +76,14 @@ const EditScreen = ({navigation}) => {
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={styles.footerselected}
-                    onPress={()=>navigation.navigate('Home')}
+                    onPress={()=>navigation.goBack()}
                     >
                         <View style={styles.footerselectedinner}>
                             <Ionicons name="chevron-back-outline" size={22} color="white" />
                             <Text style={[styles.footerText, styles.footerTextSelected]}>Back</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity  onPress={()=>navigation.navigate('home')}>
                         <Text style={styles.footerText}>Home</Text>
                     </TouchableOpacity>
                 </View>
@@ -83,6 +110,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: height * 0.006,
         color: '#fff',
+        textTransform:"capitalize"
     },
     photo: {
         fontSize: 14,
@@ -107,6 +135,7 @@ const styles = StyleSheet.create({
     info: {
         color: '#939293',
         fontSize: 16,
+        textTransform:"capitalize"
     },
     buttonmain: {
         alignItems: 'center',
