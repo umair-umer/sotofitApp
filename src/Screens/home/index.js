@@ -50,8 +50,8 @@ export const Home = ({navigation}) => {
       try {
         const response = await axios.request(config);
         console.log('Profile data:', response.data.data);
-        setProfileData(response.data.data);
-        console.log(profileData, 'poiuhy');
+        setProfileData(response.data.data[0]);
+        // console.log(profileData.data.firstName, 'poiuhy');
         setError('');
       } catch (err) {
         console.log('Error fetching profile data:', err);
