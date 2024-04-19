@@ -31,6 +31,10 @@ import TWOBUILD from '../Assests/workouts.png'
 import KNIFE from '../Assests/cutler.png'
 import FIRECIRCLE from '../Assests/motivate.png'
 import UMAIR from '../Assests/calries.png'
+import bgfast from '../Assests/bgfast.png'
+import chart from '../Assests/chart.png'
+import eggwhites from '../Assests/eggwhites.png'
+
 
 const Images = {
     
@@ -66,6 +70,9 @@ const Images = {
     KNIFE,
     FIRECIRCLE,
     UMAIR,
+    bgfast,
+    chart,
+    eggwhites
 }
 
 

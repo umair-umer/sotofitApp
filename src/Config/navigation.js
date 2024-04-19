@@ -22,6 +22,7 @@ import {
   Foodsearchscreen,
   Foodselectscreen,
   Breakfastscreen,
+  MeasPlan,
 } from '../Screens';
 import {useSelector} from 'react-redux';
 const Stack = createNativeStackNavigator();
@@ -56,6 +57,7 @@ function navigation() {
             <Stack.Screen name="food" component={Foodsearchscreen} />
             <Stack.Screen name="selectfood" component={Foodselectscreen} />
             <Stack.Screen name="breakfast" component={Breakfastscreen} />
+            <Stack.Screen name="mealplan" component={MeasPlan} />
           </>
         ) : (
           <>

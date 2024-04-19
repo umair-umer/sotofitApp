@@ -23,9 +23,9 @@ const ProfileScreen = ({navigation}) => {
     
           try {
             const response = await axios.request(config);
-            console.log('Profile data:', response.data.data);
-            setProfileData(response.data.data);
-            console.log(profileData, 'poiuhy');
+            setProfileData(response.data.data[0]);
+            console.log('Profile data:profilescreen', response.data.data);
+           
           } catch (err) {
             console.log('Error fetching profile data:', err);
           } 
@@ -52,7 +52,7 @@ const ProfileScreen = ({navigation}) => {
                         style={styles.profileImage}
                     />
                     <Text style={styles.name}>{profileData.firstName}</Text>
-                    <Text style={styles.phone}>+91 123-4567</Text>
+                    <Text style={styles.phone}>{profileData.phone}</Text>
                     <TouchableOpacity style={styles.editButton}
                      onPress={()=>navigation.navigate('Editproscreen')}>
                         <Text style={styles.editButtonText}>Edit</Text>
@@ -70,7 +70,7 @@ const ProfileScreen = ({navigation}) => {
                     <MenuItem title="Privacy & Policy" />
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={styles.footerselected}>
+                    <TouchableOpacity style={styles.footerselected} onPress={()=>navigation.goBack()}>
                         <View style={styles.footerselectedinner}>
                             <Ionicons name="chevron-back-outline" size={22} color="white" />
                             <Text style={[styles.footerText, styles.footerTextSelected]}>Back</Text>

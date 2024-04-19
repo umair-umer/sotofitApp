@@ -21,21 +21,27 @@ const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
-import {clearAuthToken} from '../../../store/action/actions';
+import {
+  clearAuthToken,
+  setNutritionplan,
+  setWorkoutPlan,
+} from '../../../store/action/actions';
 import {Loader} from '../../Components/loder';
 import axios from 'axios';
-import {baseUrl} from '../../Config/baseurl';
+import {baseUrl, imagebaseurl} from '../../Config/baseurl';
 const imageSize = width * 0.18;
-
 export const Home = ({navigation}) => {
-  
   const [load, setloader] = useState();
   const dispatch = useDispatch(); // Use useDispatch hook to dispatch actions
   const token = useSelector(state => state.authToken);
+  const data = useSelector(state => state.workoutPlan?.data);
+  const nutrions = useSelector(state => state.nutritionplan);
+
+  console.log('nutritionsdatafrom redux', nutrions);
   const [searchQuery, setSearchQuery] = useState('');
   const [profileData, setProfileData] = useState('');
-  const [Error, setError] = useState('');
-
+  const [nutritionData, setNutritionData] = useState(null);
+  const [error, setError] = useState('');
   useEffect(() => {
     const fetchData = async () => {
       setloader(true);
@@ -89,27 +95,99 @@ export const Home = ({navigation}) => {
   const handleSearch = text => {
     setSearchQuery(text);
   };
-  const profiles = [
+  const items = [
     {
-      name: 'SotoFits Workouts',
-      image: Images.workouts,
+      image: Images.TWOBUILD,
+      text: 'SotoFits Workouts',
+      onPress: () => {},
     },
     {
-      name: 'Cardio Champions',
-      image: Images.calries,
+      image: Images.KNIFE,
+      text: 'SotoEats Nutrition',
+      onPress: () => {navigation.navigate('mealplan')},
     },
     {
-      name: 'Yoga Masters',
-      image: Images.cutler,
+      image: Images.FIRECIRCLE,
+      text: 'Calorie Counter',
+      onPress: () => {},
     },
     {
-      name: 'Strength Series',
-      image: Images.motivate,
+      image: Images.UMAIR,
+      text: 'Daily Motivation',
+      onPress: () => {},
     },
   ];
-  const [activeDay, setActiveDay] = useState('Today');
 
-  const days = ['Today', 'Tue.', 'Wed.', 'Thurs.', 'Fri.'];
+  useEffect(() => {
+    const fetchWorkoutPlan = async () => {
+      // Setup headers
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // Cookie: "token=YOUR_TOKEN",
+        },
+      };
+
+      try {
+        const response = await axios.get(
+          'https://soto.democlientlink.com/api/v1/sotofit/mobile/home/workout',
+          config,
+        );
+        console.log(response, 'workoutplan');
+
+        dispatch(setWorkoutPlan(response.data)); // Assuming the response is the data you want
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching workout plan:', err);
+      }
+    };
+    const fetchNutritionPlan = async () => {
+      if (!nutrions || !nutrions.some(plan => plan.dayPlan === activeDay)) {
+        const config = {
+          headers: {Authorization: `Bearer ${token}`},
+        };
+        try {
+          const response = await axios.get(
+            'https://soto.democlientlink.com/api/v1/sotofit/mobile/home/nutrition',
+            config,
+          );
+
+          setNutritionData(prevData => {
+            const existingData = Array.isArray(prevData) ? prevData : [];
+
+            return [...existingData, ...response.data.data];
+          });
+          dispatch(setNutritionplan(response.data.data));
+          console.log(response.data, 'nutrition');
+        } catch (error) {
+          console.error('Error fetching nutrition plan:', error);
+        }
+      }
+    };
+
+    fetchWorkoutPlan();
+    fetchNutritionPlan();
+  }, [token]); //
+  const handleDayChange = day => {
+    setActiveDay(day);
+  };
+  const [activeDay, setActiveDay] = useState('Mon');
+  const days = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
+  const activeWorkoutPlans = data?.filter(
+    workout => workout.dayPlan === activeDay,
+  );
+  const activeNutritionPlans = Array.isArray(nutrions)
+    ? nutrions.filter(nutrition => nutrition.dayPlan === activeDay)
+    : [];
+  console.log(activeWorkoutPlans, 'dayplan');
+  const Item = ({image, text, onPress}) => (
+    <View style={styles.crdcontainer}>
+      <TouchableOpacity style={styles.imageContainer} onPress={onPress}>
+        <Image source={image} style={styles.imageuppersmall} />
+      </TouchableOpacity>
+      <Text style={styles.text}>{text}</Text>
+    </View>
+  );
 
   return (
     <>
@@ -196,47 +274,20 @@ export const Home = ({navigation}) => {
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View style={styles.crdcontainer}>
-                    <TouchableOpacity style={styles.imageContainer}>
-                      <Image
-                        source={Images.TWOBUILD} // Replace with your image path
-                        style={styles.imageuppersmall}
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.text}>SotoFits Workouts</Text>
-                  </View>
-                  <View style={styles.crdcontainer}>
-                    <TouchableOpacity style={styles.imageContainer}>
-                      <Image
-                        source={Images.KNIFE} // Replace with your image path
-                        style={styles.imageuppersmall}
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.text}>SotoEats Nutrition</Text>
-                  </View>
-                  <View style={styles.crdcontainer}>
-                    <TouchableOpacity
-                      style={styles.imageContainer}
-                      onPress={() => navigation.navigate('groceryscreen')}>
-                      <Image
-                        source={Images.FIRECIRCLE} // Replace with your image path
-                        style={styles.imageuppersmall}
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.text}>Calorie Counter</Text>
-                  </View>
-                  <View style={styles.crdcontainer}>
-                    <TouchableOpacity style={styles.imageContainer}>
-                      <Image
-                        source={Images.UMAIR} // Replace with your image path
-                        style={styles.imageuppersmall}
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.text}>Daily Motivation</Text>
-                  </View>
+                  {items.map((item, index) => (
+                    <Item
+                      key={index}
+                      image={item.image}
+                      text={item.text}
+                      onPress={item.onPress}
+                    />
+                  ))}
                 </ScrollView>
               </View>
-              <View style={styles.dayscontainer}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.dayscontainer}>
                 {days.map(day => (
                   <TouchableOpacity
                     key={day}
@@ -244,7 +295,9 @@ export const Home = ({navigation}) => {
                       styles.dayTab,
                       activeDay === day && styles.activeDayTab,
                     ]}
-                    onPress={() => setActiveDay(day)}>
+                    // onPress={() => setActiveDay(day)}
+
+                    onPress={() => handleDayChange(day)}>
                     <Text
                       style={[
                         styles.dayText,
@@ -254,96 +307,78 @@ export const Home = ({navigation}) => {
                     </Text>
                   </TouchableOpacity>
                 ))}
-              </View>
+              </ScrollView>
               <Text style={styles.wrkistory}>Workout History</Text>
-            <View style={styles.workoutcontainer}>
-              <View style={styles.header}>
-                <Text style={styles.headerText}>Today's Workout</Text>
-                <TouchableOpacity>
-                  <Text style={styles.seeAllButton}>See all</Text>
-                </TouchableOpacity>
-              </View>
+              <View style={styles.workoutcontainer}>
+                <View style={styles.header}>
+                  <Text style={styles.headerText}>Today's Workout</Text>
+                </View>
                 <View style={styles.exercisemain}>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <TouchableOpacity onPress={() => navigation.navigate('exercisescreen')}>
-                      <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
-                      <View style={styles.lock}>
-                       <Entypo
-                        name='lock'
-                        size={15}
-                        color='#000000A1'
-                        />
-                       </View>
-                        <View style={styles.mainslidercontent}>
-                          <Text style={styles.sliderhead}>Strengthen Chest & Back</Text>
-                          <Text style={styles.slidertext}>SotoFits Basic</Text>
-                        </View>
-                      </ImageBackground>
-                    </TouchableOpacity>
-                    <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
-                      <View style={styles.premium}>
-                        <Text style={styles.premiumText}>Premium</Text>
-                      </View>
-                      <View style={styles.mainslidercontent}>
-                        <Text style={styles.sliderhead}>Cardio Training</Text>
-                        <Text style={styles.slidertext}>SotoFits Basic</Text>
-                      </View>
-                    </ImageBackground>
-                    <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
-                    <View style={styles.lock}>
-                       <Entypo
-                        name='lock'
-                        size={15}
-                        color='#000000A1'
-                        />
-                       </View>
-                      <View style={styles.mainslidercontent}>
-                        <Text style={styles.sliderhead}>Cardio Training</Text>
-                        <Text style={styles.slidertext}>SotoFits Basic</Text>
-                      </View>
-                    </ImageBackground>
+                    {activeWorkoutPlans &&
+                      activeWorkoutPlans?.map((ex, index) => {
+                        return (
+                          <TouchableOpacity
+                            key={index}
+                            onPress={() =>
+                              navigation.navigate('exercisescreen', {
+                                exercise: ex,
+                                activeWorkoutPlan: ex,
+                              })
+                            }>
+                            <ImageBackground
+                              source={{uri: `${imagebaseurl}${ex.firstImage}`}}
+                              style={styles.exerciseone}>
+                              <View style={styles.lock}>
+                                <Entypo
+                                  name="lock"
+                                  size={15}
+                                  color="#000000A1"
+                                />
+                              </View>
+                              <View style={styles.mainslidercontent}>
+                                <Text style={styles.sliderhead}>
+                                  {ex.title}
+                                </Text>
+                                <Text style={styles.slidertext}>
+                                  {ex.description}
+                                </Text>
+                              </View>
+                            </ImageBackground>
+                          </TouchableOpacity>
+                        );
+                      })}
                   </ScrollView>
                 </View>
                 <View style={styles.header}>
-                <Text style={styles.headerText2}>Today's Nutrition</Text>
-              </View>
+                  <Text style={styles.headerText2}>Today's Nutrition</Text>
+                </View>
                 <View style={styles.exercisemain}>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                      <ImageBackground source={Images.FOOD} style={styles.exerciseone}>
-                       <View style={styles.lock}>
-                       <Entypo
-                        name='lock'
-                        size={15}
-                        color='#000000A1'
-                        />
-                       </View>
-                        <View style={styles.mainslidercontent}>
-                          <Text style={styles.sliderhead}>Dinner</Text>
-                          <Text style={styles.slidertext}>SotoFits Basic</Text>
-                        </View>
-                      </ImageBackground>
-                    <ImageBackground source={Images.FOOD} style={styles.exerciseone}>
-                    <View style={styles.premium}>
-                        <Text style={styles.premiumText}>Premium</Text>
-                      </View>
-                      <View style={styles.mainslidercontent}>
-                        <Text style={styles.sliderhead}>Breakfast</Text>
-                        <Text style={styles.slidertext}>SotoFits Basic</Text>
-                      </View>
-                    </ImageBackground>
-                    <ImageBackground source={Images.FOOD} style={styles.exerciseone}>
-                    <View style={styles.lock}>
-                       <Entypo
-                        name='lock'
-                        size={15}
-                        color='#000000A1'
-                        />
-                       </View>
-                      <View style={styles.mainslidercontent}>
-                        <Text style={styles.sliderhead}>Lunch</Text>
-                        <Text style={styles.slidertext}>SotoFits Basic</Text>
-                      </View>
-                    </ImageBackground>
+                  
+
+                    {activeNutritionPlans?.map((nutrition, index) => (
+
+                      <TouchableOpacity key={index} style={styles.nutritionCard} onPress={()=>navigation.navigate('mealplan',{mealplan:nutrition})}>
+                      
+                            <ImageBackground
+                            key={index}
+                            source={{uri: `${imagebaseurl}${nutrition.meal[index].firstImage}`}}
+                              style={styles.exerciseone}>
+                              <View style={styles.premium}>
+                                <Text style={styles.premiumText}>Premium</Text>
+                              </View>
+                              <View style={styles.mainslidercontent}>
+                                <Text style={styles.sliderhead}>{nutrition.meal[index].title}</Text>
+                                <Text style={styles.slidertext}>
+                                  {nutrition.meal[index].desc}
+                                </Text>
+                              </View>
+                            </ImageBackground>
+            
+                      
+                      </TouchableOpacity>
+                    ))}
                   </ScrollView>
                 </View>
               </View>
@@ -539,7 +574,7 @@ const styles = StyleSheet.create({
   },
   dayscontainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     paddingVertical: height * 0.01,
     backgroundColor: 'transparent',
   },
@@ -548,6 +583,7 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.01,
     paddingHorizontal: width * 0.05,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    marginHorizontal: width * 0.02,
   },
   activeDayTab: {
     backgroundColor: 'rgba(255, 0, 0, 0.5)',
@@ -643,16 +679,18 @@ const styles = StyleSheet.create({
   },
   workoutcontainer: {
     padding: 16,
-  }, 
-exercisemain: {
+  },
+  exercisemain: {
     marginVertical: height * 0.02,
   },
   exerciseone: {
-    width: 250,
-    height: 170,
+    width: width * 0.7,
+    height: height * 0.23,
+    overflow: 'hidden',
+    borderRadius: 15,
     resizeMode: 'cover',
     marginRight: width * 0.06,
-    justifyContent:"flex-end",
+    justifyContent: 'flex-end',
   },
   mainslidercontent: {
     backgroundColor: 'rgba(0, 0, 0, .6)',
@@ -697,4 +735,3 @@ exercisemain: {
     marginTop: height * 0.04,
   },
 });
-

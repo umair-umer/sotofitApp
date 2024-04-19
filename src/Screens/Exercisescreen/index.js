@@ -10,17 +10,35 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Entypo from 'react-native-vector-icons/Entypo';
 import jestConfig from '../../../jest.config';
 import { initialWindowMetrics } from 'react-native-safe-area-context';
+import { imagebaseurl } from '../../Config/baseurl';
 
-function Exercisescreen() {
+function Exercisescreen({route}) {
+
+    const  activeWorkoutPlan  = route.params.activeWorkoutPlan;
+    // console.log(activeWorkoutPlan, "====>holaa");
+
+   // Check if activeWorkoutPlan and exercise exist
+   if (!activeWorkoutPlan || !activeWorkoutPlan.exercise) {
+    console.error('Exercise data is not available');
+    return <Text>No exercise data available</Text>;
+}
+const { title, description, exerciseCount, equipment, exercise } = activeWorkoutPlan;
+
+console.log(exercise,"====>holaa");
+
+  
+
+
     return (
+    
         <SafeAreaView style={styles.container}>
             <ImageBackground source={Images.EXERCISEBACK} style={styles.backgroundImage}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.maincontent}>
                         <View>
-                            <Text style={styles.tophead}>Strengthen Chest & Back</Text>
-                            <Text style={styles.toptext}>SotoFits Basic</Text>
-                            <Text style={styles.topquantity}>05 Exercises</Text>
+                            <Text style={styles.tophead}>{title}</Text>
+                            <Text style={styles.toptext}>{description}</Text>
+                            <Text style={styles.topquantity}>{exerciseCount} Exercises</Text>
                             <View style={styles.topicon}>
                                 <Entypo
                                     name='lock'
@@ -40,77 +58,48 @@ function Exercisescreen() {
                             </View>
                         </View>
                         <View>
-                            <Text style={styles.equipmentneeded}>Equipment Needed: Dumbbells, Bench, Pullup Bar</Text>
+                            <Text style={styles.equipmentneeded}>Equipment Needed: {equipment}</Text>
                             <View style={styles.bigbutton}>
                                 <Text style={{ fontSize: calculateFontSize(19), color: '#fff' }}>Intro/Warmup</Text>
                             </View>
                         </View>
-                        <View>
-                            <View style={styles.bigbuttonsec}>
-                                <Text style={{ fontSize: calculateFontSize(19), color: '#fff' }}>Pushups</Text>
-                                <TouchableOpacity>
-                                    <Text style={styles.innerbutton}>See All Options</Text>
-                                </TouchableOpacity>
+                        {exercise.map((exerciseGroup, index) => (
+                            <View key={index}>
+                                <View style={styles.bigbuttonsec}>
+                                    <Text style={{ fontSize: calculateFontSize(19), color: '#fff' }}>
+                                        {exerciseGroup.title}
+                                    </Text>
+                                  
+                                </View>
+                                <ScrollView
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    style={styles.exercisemain}
+                                >
+                                    {exerciseGroup.subExercise.map((subEx, subIndex) => (
+                                        <ImageBackground
+                                        key={subEx._id || subIndex}
+                                            // source={Images.EXERCISEONE}
+                                            // source={{ uri: subEx.thumbnail }}
+                                            source={{uri:`${imagebaseurl}${subEx.thumbnail}`}}
+                                            style={styles.exerciseone}
+                                            onError={(e) => console.log(e.nativeEvent.error,"====zimage")}
+                                        >
+                                            <View style={styles.slidertextmain}>
+                                                <Text style={styles.sliderhead}>{subEx.name}</Text>
+                                                <Text style={[styles.samesize, styles.colorLight]}>
+                                                    {subEx.description}
+                                                </Text>
+                                                <Text style={[styles.samesize, styles.colorBlue]}>
+                                                    {subEx.equipment || 'No Equipment Needed'}
+                                                </Text>
+                                            </View>
+                                        </ImageBackground>
+                                    ))}
+                                </ScrollView>
                             </View>
-                        </View>
-                        <View style={styles.exercisemain}>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                                <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
-                                    <View style={styles.slidertextmain}>
-                                        <Text style={styles.sliderhead}>Pushups</Text>
-                                        <Text style={[styles.samesize, styles.colorLight]}>SotoFits Basic</Text>
-                                        <Text style={[styles.samesize, styles.colorBlue]}>No Equipment Needed</Text>
-                                    </View>
-                                </ImageBackground>
-                                <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
-                                    <View style={styles.slidertextmain}>
-                                        <Text style={styles.sliderhead}>Pushups</Text>
-                                        <Text style={[styles.samesize, styles.colorLight]}>SotoFits Basic</Text>
-                                        <Text style={[styles.samesize, styles.colorBlue]}>No Equipment Needed</Text>
-                                    </View>
-                                </ImageBackground>
-                                <ImageBackground source={Images.EXERCISEONE} style={styles.exerciseone}>
-                                    <View style={styles.slidertextmain}>
-                                        <Text style={styles.sliderhead}>Pushups</Text>
-                                        <Text style={[styles.samesize, styles.colorLight]}>SotoFits Basic</Text>
-                                        <Text style={[styles.samesize, styles.colorBlue]}>No Equipment Needed</Text>
-                                    </View>
-                                </ImageBackground>
-                            </ScrollView>
-                        </View>
-                        <View>
-                            <View style={styles.bigbuttonsec}>
-                                <Text style={{ fontSize: calculateFontSize(19), color: '#fff' }}>Pullups</Text>
-                                <TouchableOpacity>
-                                    <Text style={styles.innerbutton}>See All Options</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={styles.exercisemain}>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                                <ImageBackground source={Images.EXERCISETWO} style={styles.exerciseone}>
-                                    <View style={styles.slidertextmain}>
-                                        <Text style={styles.sliderhead}>Pullups</Text>
-                                        <Text style={[styles.samesize, styles.colorLight]}>SotoFits+</Text>
-                                        <Text style={[styles.samesize, styles.colorBlue]}>Pullup Bar Required</Text>
-                                    </View>
-                                </ImageBackground>
-                                <ImageBackground source={Images.EXERCISETWO} style={styles.exerciseone}>
-                                    <View style={styles.slidertextmain}>
-                                        <Text style={styles.sliderhead}>Pullups</Text>
-                                        <Text style={[styles.samesize, styles.colorLight]}>SotoFits+</Text>
-                                        <Text style={[styles.samesize, styles.colorBlue]}>Pullup Bar Required</Text>
-                                    </View>
-                                </ImageBackground>
-                                <ImageBackground source={Images.EXERCISETWO} style={styles.exerciseone}>
-                                    <View style={styles.slidertextmain}>
-                                        <Text style={styles.sliderhead}>Pullups</Text>
-                                        <Text style={[styles.samesize, styles.colorLight]}>SotoFits+</Text>
-                                        <Text style={[styles.samesize, styles.colorBlue]}>Pullup Bar Required</Text>
-                                    </View>
-                                </ImageBackground>
-                            </ScrollView>
-                        </View>
+                        ))}
+                      
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -203,9 +192,11 @@ const styles = StyleSheet.create({
         marginVertical: height * 0.02,
     },
     exerciseone: {
-        width: 250,
-        height: 170,
-        resizeMode: 'cover',
+        width: width*0.7,
+        height: height*0.23,
+        resizeMode: 'center',
+        borderRadius:15,
+        overflow:"hidden",
         marginHorizontal: width * 0.03,
     },
     sliderhead: {

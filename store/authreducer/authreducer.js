@@ -1,9 +1,11 @@
-import {CLEAR_AUTH_TOKEN, SET_AUTH_TOKEN} from '../actiontypes/actionTypes';
+import {CLEAR_AUTH_TOKEN, CLEAR_WORKOUT_PLAN, SET_AUTH_TOKEN, SET_WORKOUT_PLAN,SET_NUTRITION_PLAN} from '../actiontypes/actionTypes';
 // authReducer.js
 
 const initialState = {
   authToken: null,
   isAssessment: null,
+  workoutPlan: null,
+  nutritionplan:null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -25,6 +27,23 @@ const authReducer = (state = initialState, action) => {
         isAssessment: action.res,
       };
     }
+    case SET_WORKOUT_PLAN: // Handle setting the workout plan
+    return {
+      ...state,
+      workoutPlan: action.payload,
+    };
+  case CLEAR_WORKOUT_PLAN: // Handle clearing the workout plan
+    return {
+      ...state,
+      workoutPlan: null,
+    };
+    case SET_NUTRITION_PLAN: // Handle clearing the workout plan
+    return {
+      ...state,
+      nutritionplan: action.payload,
+    };
+
+    
     default:
       return state;
   }

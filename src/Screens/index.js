@@ -18,6 +18,7 @@ import Calorietrackerscreen from './Calorietrackerscreen';
 import Foodsearchscreen from './Foodsearchscreen';
 import Foodselectscreen from './Selectfoodscreen';
 import Breakfastscreen from './Breakfastscreen';
+import { MeasPlan } from './mealscreen';
 
 
 export {
@@ -41,4 +42,5 @@ export {
   Foodsearchscreen,
   Foodselectscreen,
   Breakfastscreen,
+  MeasPlan
 };
